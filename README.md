@@ -1,7 +1,8 @@
 ___SELinux stage3 tarballs are also available and supported - this is significantly easier than performing the steps below. The tarballs can be simply unpacked onto a target system, relabel the entire system, add the initial user to the administration SELinux user and reboot___
 
-# DISK PREPARATION
+# Disk Preparation
 ## LVM
+``````sh
 cfdisk /dev/nvme0n1 &&
   mkfs.vfat -F 32 /dev/nvme0n1p1 &&
   cryptsetup --cipher aes-xts-plain64 --hash sha512 --use-random --verify-passphrase luksFormat /dev/nvme0n1p2 &&
@@ -16,9 +17,10 @@ cfdisk /dev/nvme0n1 &&
   mkdir /mnt/gentoo &&
   mount /dev/vg0/root /mnt/gentoo &&
   swapon /dev/vg0/swap
+``````
 
-
-## SUBVOLUMES
+## Subvolumes
+``````sh
 btrfs su cr /mnt/gentoo/@ &&
   btrfs su cr /mnt/gentoo/@home &&
   btrfs su cr /mnt/gentoo/@opt &&
@@ -35,8 +37,10 @@ btrfs su cr /mnt/gentoo/@ &&
   btrfs su cr /mnt/gentoo/@var@log@audit &&
   btrfs su cr /mnt/gentoo/@snapshots &&
   umount /mnt/gentoo
+``````
 
-## MOUNTING
+## Mount Drives
+``````sh
 mount -o noatime,compress=zstd:3,space_cache=v2,discard=async,subvol=@ /dev/vg0/root /mnt/gentoo &&
   mkdir /mnt/gentoo/home &&
   mount -o noatime,compress=zstd:3,space_cache=v2,discard=async,subvol=@home /dev/vg0/root /mnt/gentoo/home &&
@@ -66,6 +70,7 @@ mount -o noatime,compress=zstd:3,space_cache=v2,discard=async,subvol=@ /dev/vg0/
   mount -o noatime,compress=zstd:3,space_cache=v2,discard=async,subvol=@var@log@audit /dev/vg0/root /mnt/gentoo/var/log/audit &&
   mkdir /mnt/gentoo/.snapshots &&
   mount -o noatime,compress=zstd:3,space_cache=v2,discard=async,subvol=@snapshots /dev/vg0/root /mnt/gentoo/.snapshots
+``````
 
 # SETUP ENVIRONMENT FOR GENTOO
 cd /mnt/gentoo && wget https://distfiles.gentoo.org/releases/amd64/autobuilds/20250413T165021Z/stage3-amd64-desktop-openrc-20250413T165021Z.tar.xz && tar xpvf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner && mkdir --parents /mnt/gentoo/etc/portage/repos.conf && cp /mnt/gentoo/usr/share/portage/config/repos.conf /mnt/gentoo/etc/portage/repos.conf/gentoo.conf && cp --dereference /etc/resolv.conf /mnt/gentoo/etc/ && mount --types proc /proc /mnt/gentoo/proc && mount --rbind /sys /mnt/gentoo/sys && mount --make-rslave /mnt/gentoo/sys && mount --rbind /dev /mnt/gentoo/dev && mount --make-rslave /mnt/gentoo/dev && mount --bind /run /mnt/gentoo/run && mount --make-slave /mnt/gentoo/run && test -L /dev/shm && rm /dev/shm && mkdir /dev/shm && mount -t tmpfs -o nosuid,nodev,noexec shm /dev/shm && chmod 1777 /dev/shm
