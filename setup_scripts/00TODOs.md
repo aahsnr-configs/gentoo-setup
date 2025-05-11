@@ -289,6 +289,7 @@ ln -sv $HOME/.dots/.config/zathura $HOME/.config/
 ln -sv $HOME/.dots/.gtkrc-2.0 $HOME/
 
 # GENERAL
+- [ ] Need to port over firefox config 
 - [x] Configure anyrun like home-nix
 - [ ] Update zsh config and borrow certain elements from Nisfere
 - [ ] Setup yazi and its plugins and optimize it

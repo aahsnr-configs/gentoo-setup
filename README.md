@@ -1,4 +1,4 @@
-___SELinux stage3 tarballs are also available and supported - this is significantly easier than performing the steps below. The tarballs can be simply unpacked onto a target system, relabel the entire system, add the initial user to the administration SELinux user and reboot___
+___To setup selinux for desktop (not yet running in my system), in two primary way: (1)the SELinux stage3 tarballs that are  available and supported - this is significantly easier than performing the steps below. The tarballs can be simply unpacked onto a target system, relabel the entire system, add the initial user to the administration SELinux user and reboot; or (2) follow the guideline put forwared in https://wiki.gentoo.org/wiki/SELinux/Installation___
 
 # Disk Preparation
 ## Setup LVM
@@ -106,16 +106,6 @@ ln -sf ../usr/share/zoneinfo/Asia/Dhaka /etc/localtime && nano /etc/locale.gen &
 ``````
 
 
-
-# CHECKS for Python - PGO & LTO
-## LTO
-    python3 -c "import sysconfig; print('lto' in (sysconfig.get_config_var('PY_CFLAGS') + sysconfig.get_config_var('PY_CFLAGS_NODIST')))"
-
-## PGO
-    python3 -c "import sysconfig; print('-fprofile-use' in (sysconfig.get_config_var('PY_CFLAGS') + sysconfig.get_config_var('PY_CFLAGS_NODIST')))"
-
-## PY_CFLAGS
-    python3 -c "import sysconfig; print(sysconfig.get_config_var('PY_CFLAGS') + sysconfig.get_config_var('PY_CFLAGS_NODIST'))"
 
 # PORTAGE && ITS REPOS
 emerge -aq --jobs=5 app-eselect/eselect-repository dev-vcs/git && eselect repository remove gentoo && eselect repository add gentoo git https://github.com/gentoo-mirror/gentoo.git  && emaint sync -r gentoo && eselect repository enable guru pentoo edgets gentoo-zh CachyOS-kernels xarblu-overlay && eselect repository create custom && emerge --sync
@@ -688,5 +678,12 @@ swapon /dev/vg0/swap
 ```
 
 # GENERAL COMMANDS
+
+``````sh
 - emacs --batch --eval "(require 'org)" --eval '(org-babel-tangle-file "file-to-tangle.org")'
 - #+begin_src python  :shebang "#!/usr/bin/env python"
+
+- PY_CFLAGS:
+python3 -c "import sysconfig; print(sysconfig.get_config_var('PY_CFLAGS') + sysconfig.get_config_var('PY_CFLAGS_NODIST'))"
+
+
