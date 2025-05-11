@@ -1,7 +1,7 @@
 ___SELinux stage3 tarballs are also available and supported - this is significantly easier than performing the steps below. The tarballs can be simply unpacked onto a target system, relabel the entire system, add the initial user to the administration SELinux user and reboot___
 
 # Disk Preparation
-## LVM
+## Setup LVM
 ``````sh
 cfdisk /dev/nvme0n1 &&
   mkfs.vfat -F 32 /dev/nvme0n1p1 &&
@@ -72,45 +72,39 @@ mount -o noatime,compress=zstd:3,space_cache=v2,discard=async,subvol=@ /dev/vg0/
   mount -o noatime,compress=zstd:3,space_cache=v2,discard=async,subvol=@snapshots /dev/vg0/root /mnt/gentoo/.snapshots
 ``````
 
-# SETUP ENVIRONMENT FOR GENTOO
+# Setup Host System for Installing Gentoo and its Packages
+## Setup Base Environment
+[!Note]: You may need update the source tar.xz file 
+``````sh
 cd /mnt/gentoo && wget https://distfiles.gentoo.org/releases/amd64/autobuilds/20250413T165021Z/stage3-amd64-desktop-openrc-20250413T165021Z.tar.xz && tar xpvf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner && mkdir --parents /mnt/gentoo/etc/portage/repos.conf && cp /mnt/gentoo/usr/share/portage/config/repos.conf /mnt/gentoo/etc/portage/repos.conf/gentoo.conf && cp --dereference /etc/resolv.conf /mnt/gentoo/etc/ && mount --types proc /proc /mnt/gentoo/proc && mount --rbind /sys /mnt/gentoo/sys && mount --make-rslave /mnt/gentoo/sys && mount --rbind /dev /mnt/gentoo/dev && mount --make-rslave /mnt/gentoo/dev && mount --bind /run /mnt/gentoo/run && mount --make-slave /mnt/gentoo/run && test -L /dev/shm && rm /dev/shm && mkdir /dev/shm && mount -t tmpfs -o nosuid,nodev,noexec shm /dev/shm && chmod 1777 /dev/shm
+``````
 
-# PRECONFIG FILES
+## Copy System Configuration Files to **/mnt/gentoo**
+``````sh
 rm -R /mnt/gentoo/etc/portage/make.conf && rm -R /mnt/gentoo/etc/portage/package.accept_keywords && rm -R /mnt/gentoo/etc/portage/package.use && rm -R /mnt/gentoo/etc/portage/package.mask && cp -R /home/ahsan/.dots/gentoo/preconfig_files/with_selinux/etc/portage/* /mnt/gentoo/etc/portage/ && cp -R /home/ahsan/.dots/gentoo/preconfig_files/with_selinux/.nanorc /mnt/gentoo/root/  && cp -R /home/ahsan/.dots/gentoo/preconfig_files/with_selinux/tc-optimize /mnt/gentoo/root/
+``````
 
-# CHROOT
+## Chroot into Gentoo
+[!Note]: Run the following commands one-by-one
+``````sh
 chroot /mnt/gentoo /bin/bash
 source /etc/profile
 export PS1="(chroot) ${PS1}"
 
 mount /dev/nvme0n1p1 /boot
+``````
 
-# INITIAL SYNC
+# Setting Up Chroot for Installing Packages
+## Initial Sync
+``````sh
 emerge-webrsync && emerge --sync && eselect profile list
+``````
 
-# LOCALES
+## Setup Locales
+``````sh
 ln -sf ../usr/share/zoneinfo/Asia/Dhaka /etc/localtime && nano /etc/locale.gen && locale-gen && eselect locale list && eselect locale set 4 && env-update && source /etc/profile && export PS1="(chroot) ${PS1}"
+``````
 
-[!NOTE] : Before begining optimizations, move necessary flags from cachyos make.conf to all my configs including make.conf, and envs
-
-# OPTIMIZAZTIONS
-
-1. emerge linux-headers && emerge glibc && emerge binutils && env-update && source /etc/profile && export PS1="(chroot) ${PS1}" && emerge gcc && emerge glibc && emerge sys-libs/zlib dev-lang/tcl dev-tcltk/expect dev-util/dejagnu dev-libs/elfutils dev-util/sysprof dev-debug/valgrind dev-libs/mpfr dev-libs/mpc
- && emerge binutils && env-update && source /etc/profile && export PS1="(chroot) ${PS1}"
-2. optimize cmake, then ( exit, chroot /mnt/gentoo /bin/bash, source /etc/profile, export PS1="(chroot) ${PS1}" ),
-3. To optimize clang/llvm, first emerge lld without LDFLAGS, then re-emerge lld with LDFLAGS
-4. optimize polly-19, clang/llvm-19, then ( exit, chroot /mnt/gentoo /bin/bash, source /etc/profile, export PS1="(chroot) ${PS1}" )
-5. optimize clang/llvm-18
-6. optimize python313/python312
-7. optimize rust, nodejs
-8. emerge -ev @world --exclude gcc
-
-binutils: dev-tcltk/expect dev-util/dejagnu
-gcc: dev-libs/gmp dev-libs/isl-0.26
-
-libtool --finish /usr/lib/../lib64
-libtool --finish /usr/lib64
-libtool --finish /usr/libexec/gcc/x86_64-pc-linux-gnu
 
 
 # CHECKS for Python - PGO & LTO
