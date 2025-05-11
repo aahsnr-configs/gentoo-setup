@@ -245,10 +245,12 @@ emerge x11-drivers/nvidia-drivers gui-libs/egl-wayland gui-libs/egl-gbm gui-libs
 make install LLVM=1 KCFLAGS="-O3 -march=native -pipe -flto=thin"
 
 ### Build with -polly
-- [-] make nconfig LLVM=1 KCFLAGS="-O3 -march=native -pipe -flto=thin -fno-math-errno -fno-signed-zeros -fno-trapping-math -fcf-protection -D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -fstack-protector-strong -fstack-clash-protection -fplugin=LLVMPolly.so -mllvm=-polly -mllvm=-polly-vectorizer=stripmine -mllvm=-polly-omp-backend=LLVM -mllvm=-polly-parallel -mllvm=-polly-num-threads=9 -mllvm=-polly-scheduling=dynamic"
-
-- [-] make -j10 LLVM=1 KCFLAGS="-O3 -march=native -pipe -flto=thin -fno-math-errno -fno-signed-zeros -fno-trapping-math -fcf-protection -D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -fstack-protector-strong -fstack-clash-protection -fplugin=LLVMPolly.so -mllvm=-polly -mllvm=-polly-vectorizer=stripmine -mllvm=-polly-omp-backend=LLVM -mllvm=-polly-parallel -mllvm=-polly-num-threads=9 -mllvm=-polly-scheduling=dynamic"
-
+``````sh
+make nconfig LLVM=1 KCFLAGS="-O3 -march=native -pipe -flto=thin -fno-math-errno -fno-signed-zeros -fno-trapping-math -fcf-protection -D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -fstack-protector-strong -fstack-clash-protection -fplugin=LLVMPolly.so -mllvm=-polly -mllvm=-polly-vectorizer=stripmine -mllvm=-polly-omp-backend=LLVM -mllvm=-polly-parallel -mllvm=-polly-num-threads=9 -mllvm=-polly-scheduling=dynamic"
+``````
+``````sh
+make -j10 LLVM=1 KCFLAGS="-O3 -march=native -pipe -flto=thin -fno-math-errno -fno-signed-zeros -fno-trapping-math -fcf-protection -D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -fstack-protector-strong -fstack-clash-protection -fplugin=LLVMPolly.so -mllvm=-polly -mllvm=-polly-vectorizer=stripmine -mllvm=-polly-omp-backend=LLVM -mllvm=-polly-parallel -mllvm=-polly-num-threads=9 -mllvm=-polly-scheduling=dynamic"
+``````
 - [-] make modules_install -j14 llvm=1 kcflags="-o3 -march=native -pipe -flto=thin -fno-math-errno -fno-signed-zeros -fno-trapping-math -fcf-protection -d_fortify_source=3 -d_glibcxx_assertions -fstack-protector-strong -fstack-clash-protection -fplugin=llvmpolly.so -mllvm=-polly -mllvm=-polly-vectorizer=stripmine -mllvm=-polly-omp-backend=llvm -mllvm=-polly-parallel -mllvm=-polly-num-threads=9 -mllvm=-polly-scheduling=dynamic"
 
 - [-] emerge x11-drivers/nvidia-drivers gui-libs/egl-wayland gui-libs/egl-gbm gui-libs/egl-x11 media-libs/nvidia-vaapi-driver sys-process/nvtop x11-drivers/xf86-video-amdgpu
@@ -257,6 +259,7 @@ make install LLVM=1 KCFLAGS="-O3 -march=native -pipe -flto=thin"
  
 
 # System Packages
+``````sh
 emerge --ask  \
   app-admin/bitwarden-desktop-bin \
   app-admin/sysstat \
@@ -444,6 +447,7 @@ emerge --ask  \
   sys-fs/cryptsetup \
   app-backup/grub-btrfs \
   net-wireless/iwd 
+``````
 
 # OPENRC
 rc-update add dhcpcd default && rc-service dhcpcd start && \
@@ -682,6 +686,10 @@ swapon /dev/vg0/swap
 ``````sh
 - emacs --batch --eval "(require 'org)" --eval '(org-babel-tangle-file "file-to-tangle.org")'
 - #+begin_src python  :shebang "#!/usr/bin/env python"
+
+- grep 'app-emacs/' /var/lib/portage/world | xargs --open-tty emerge --ask --deselect; emerge --ask --depclean
+
+- esearch esearch -I emacs #list all installed emacs packages 
 
 - PY_CFLAGS:
 python3 -c "import sysconfig; print(sysconfig.get_config_var('PY_CFLAGS') + sysconfig.get_config_var('PY_CFLAGS_NODIST'))"
