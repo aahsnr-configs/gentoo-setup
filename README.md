@@ -108,8 +108,9 @@ ln -sf ../usr/share/zoneinfo/Asia/Dhaka /etc/localtime && nano /etc/locale.gen &
 
 
 # PORTAGE && ITS REPOS
+``````sh
 emerge -aq --jobs=5 app-eselect/eselect-repository dev-vcs/git && eselect repository remove gentoo && eselect repository add gentoo git https://github.com/gentoo-mirror/gentoo.git  && emaint sync -r gentoo && eselect repository enable guru pentoo edgets gentoo-zh CachyOS-kernels xarblu-overlay && eselect repository create custom && emerge --sync
-
+``````
 
 # PERSONAL REPOS
 - eselect repository create custom
@@ -241,15 +242,19 @@ GRUB_CMDLINE_LINUX_DEFAULT="apparmor=1 security=apparmor"
 ``````sh
 make nconfig LLVM=1 KCFLAGS="-O3 -march=native -pipe -flto=thin -fno-math-errno -fno-signed-zeros -fno-trapping-math -fcf-protection -D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -fstack-protector-strong -fstack-clash-protection -fplugin=LLVMPolly.so -mllvm=-polly -mllvm=-polly-vectorizer=stripmine -mllvm=-polly-omp-backend=LLVM -mllvm=-polly-parallel -mllvm=-polly-num-threads=9 -mllvm=-polly-scheduling=dynamic"
 ``````
+
 ``````sh
 make -j10 LLVM=1 KCFLAGS="-O3 -march=native -pipe -flto=thin -fno-math-errno -fno-signed-zeros -fno-trapping-math -fcf-protection -D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -fstack-protector-strong -fstack-clash-protection -fplugin=LLVMPolly.so -mllvm=-polly -mllvm=-polly-vectorizer=stripmine -mllvm=-polly-omp-backend=LLVM -mllvm=-polly-parallel -mllvm=-polly-num-threads=9 -mllvm=-polly-scheduling=dynamic"
 ``````
+
 ``````sh
 make modules_install -j14 llvm=1 KCFLAGS="-o3 -march=native -pipe -flto=thin -fno-math-errno -fno-signed-zeros -fno-trapping-math -fcf-protection -d_fortify_source=3 -d_glibcxx_assertions -fstack-protector-strong -fstack-clash-protection -fplugin=llvmpolly.so -mllvm=-polly -mllvm=-polly-vectorizer=stripmine -mllvm=-polly-omp-backend=llvm -mllvm=-polly-parallel -mllvm=-polly-num-threads=9 -mllvm=-polly-scheduling=dynamic"
 ``````
+
 ``````sh
 emerge x11-drivers/nvidia-drivers gui-libs/egl-wayland gui-libs/egl-gbm gui-libs/egl-x11 media-libs/nvidia-vaapi-driver sys-process/nvtop x11-drivers/xf86-video-amdgpu
 ``````
+
 ``````sh
 make install -j14 LLVM=1 KCFLAGS="-O3 -march=native -pipe -flto=thin -fno-math-errno -fno-signed-zeros -fno-trapping-math -fcf-protection -D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -fstack-protector-strong -fstack-clash-protection -fplugin=LLVMPolly.so -mllvm=-polly -mllvm=-polly-vectorizer=stripmine -mllvm=-polly-omp-backend=LLVM -mllvm=-polly-parallel -mllvm=-polly-num-threads=9 -mllvm=-polly-scheduling=dynamic"
 `````` 

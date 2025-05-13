@@ -1,0 +1,1337 @@
+#+title: Home Configuration
+#+PROPERTY: mkdirp: yes
+* Write :tangle paths after finishing particular modules
+
+* Atuin
+
+* Bat
+
+* Btop
+
+* Catpsule
+
+* Cliphist
+
+* Cliphist Rofi
+
+* Eza
+
+* Fabric
+
+* Fastfetch
+
+* Fzf
+
+* Hypridle
+
+#+begin_src shell
+general {
+  after_sleep_cmd=/usr/bin/hyprctl dispatch dpms on
+  before_sleep_cmd=/usr/bin/loginctl lock-session
+  lock_cmd=/usr/bin/hyprlock
+}
+
+listener {
+  on-resume=/usr/bin/brightnessctl -r
+  on-timeout=/usr/bin/brightnessctl -s set 10
+  timeout=150
+}
+
+listener {
+  on-timeout=/usr/bin/loginctl lock-session
+  timeout=3000
+}
+
+listener {
+  on-resume=/usr/bin/hyprctl dispatch dpms on
+  on-timeout=/usr/bin/hyprctl dispatch dpms off
+  timeout=3300
+}
+
+listener {
+  on-timeout=/usr/bin/systemctl hibernate
+  timeout=10000
+}
+#+end_src
+
+* Hyprland
+=integrate with nisfere and fabric shell=
+** hyprland.conf
+#+begin_src shell :tangle $HOME/.config/hypr/hyprland.conf
+source=$HOME/.config/hypr/hyprland/autostart.conf
+source=$HOME/.config/hypr/hyprland/env.conf
+source=$HOME/.config/hypr/hyprland/settings.conf
+source=$HOME/.config/hypr/hyprland/keybindings.conf
+source=$HOME/.config/hypr/hyprland/rules.conf
+source=$HOME/.config/hypr/hyprland/plugins.conf
+#+end_src
+** hyprland/env.conf
+#+begin_src shell :tangle $HOME/.config/hypr/hyprland/env.conf
+#monitor=eDP-1,2560x1440@60,0x0,1.6
+monitor = HDMI-A-1,3840x2160,0x0,1.33
+
+env = __GLX_VENDOR_LIBRARY_NAME,nvidia
+env = _JAVA_OPTIONS, -Dawt.useSystemAAFontSettings=on
+env = BEMENU_BACKEND,wayland
+env = CLUTTER_BACKEND,wayland
+env = ECORE_EVAS_ENGINE,wayland_egl
+env = EGL_PLATFORM,wayland
+env = ELM_ACCEL,opengl
+env = ELM_DISPLAY,wl
+env = ELM_ENGINE,wayland_egl
+env = ELM_SCALE,1.5
+env = GBM_BACKEND,nvidia-drm
+env = GBM_BACKENDS_PATH=/usr/lib/gbm
+env = GDK_BACKEND,wayland
+#env = GDK_SCALE,1.7
+env = GDK_DPI_SCALE,1.1
+#env = GTK_A11Y,none
+env = GTK_THEME,Colloid-Purple-Dark-Catppuccin
+env = HYPRCURSOR_THEME,Bibata-Modern-Ice
+env = HYPRCURSOR_SIZE,32
+env = LIBVA_DRIVER_NAME,nvidia
+env = LIBVA_DRIVERS_PATH,/usr/lib/dri
+env = LIBGL_DRIVERS_PATH,/usr/lib/dri
+env = LIBSEAT_BACKEND,logind
+env = MOZ_DISABLE_RDD_SANDBOX,1
+env = MOZ_ENABLE_WAYLAND,1
+env = NO_AT_BRIDGE,1
+env = NVD_BACKEND,direct
+env = QT_QPA_PLATFORM,wayland
+env = QT_QPA_PLATFORMTHEME,qt5ct
+env = QT_QPA_PLATFORMTHEME,qt6ct
+env = QT_QUICK_CONTROLS_STYLE,org.hyprland.style
+env = QT_SCALE_FACTOR,1.4
+env = QT_WAYLAND_DISABLE_WINDOWDECORATION,1
+env = QT_WAYLAND_FORCE_DPI,physical
+env = SAL_USE_VCLPLUGIN,gtk4
+env = SDL_VIDEODRIVER,wayland
+env = TDESKTOP_DISABLE_GTK_INTEGRATION,1
+env = VDPAU_DRIVER,nvidia
+env = WINIT_UNIX_BACKEND,wayland
+env = WLR_DRM_DEVICES,/dev/dri/card1
+env = WLR_NO_HARDWARE_CURSORS,1
+env = WLR_RENDERER_ALLOW_SOFTWARE,1
+env = XCURSOR_SIZE,32
+env = XCURSOR_THEME, Bibata-Modern-Ice
+env = XDG_SESSION_DESKTOP,Hyprland
+env = XDG_SESSION_TYPE,wayland
+env = XDG_CURRENT_DESKTOP,Hyprland
+env = XDG_CURRENT_SESSION,Hyprland
+#+end_src
+** hyprland/keybindings.conf
+#+begin_src shell :tangle $HOME/.config/hypr/hyprland/keybindings.conf
+#--- Terminal --
+bind = SUPER, Return, exec, alacritty
+
+#--- Scratchpads --
+bind = SUPERSHIFT, RETURN, exec, pypr toggle term
+bind = SUPERSHIFT, Y, exec, pypr toggle yazi
+
+#--- Rofi --
+bind = SUPER, D, exec, hyprlauncher
+bind = SUPER, L, exec, pkill anyrun || anyrun
+bind = SUPERSHIFT, D, exec, hyprrunner
+bind = SUPER, H, exec, cliphist-rofi
+#bind = SUPERSHIFT, B, rofi-bluetooth
+
+#--- Window Management --
+bind = SUPER, Q, killactive,
+bind = ,F11, fullscreen, 0
+bind = SUPER, Space, togglefloating,
+bind = SUPER, S, togglesplit,
+
+# Change Focus
+bind = SUPER, left,  movefocus, l
+bind = SUPER, right, movefocus, r
+bind = SUPER, up,    movefocus, u
+bind = SUPER, down,  movefocus, d
+
+# Move Focused Window
+bind = SUPERSHIFT, left,  movewindow, l
+bind = SUPERSHIFT, right, movewindow, r
+bind = SUPERSHIFT, up,    movewindow, u
+bind = SUPERSHIFT, down,  movewindow, d
+
+# Resize Focused Window
+bind = SUPERCTRL, left,  resizeactive, -45 0
+bind = SUPERCTRL, right, resizeactive, 45 0
+bind = SUPERCTRL, up,    resizeactive, 0 -45
+bind = SUPERCTRL, down,  resizeactive, 0 45
+
+# Switch between windows
+bind = SUPERSHIFT, Tab, cyclenext,
+bind = SUPERSHIFT, Tab, bringactivetotop,
+
+#-- GUI Apps --
+bind = SUPER, E, exec, emacsclient -c -a 'emacs'
+bind = SUPER, B, exec, zen-browser
+bind = SUPER, Y, exec, alacritty -e yazi
+bind = SUPER, Z, exec, flatpak run org.zotero.Zotero
+bind = SUPER, F, exec, thunar
+bind = SUPER, M, exec, flatpak run md.obsidian.Obsidian
+bind = SUPERSHIFT, R, exec, jabref
+
+#-- Workspaces --
+bind = CTRL_ALT, left, exec, hyprnome --previous
+bind = CTRL_ALT, right, exec, hyprnome
+bind = SUPER_CTRL_ALT, left, exec, hyprnome --previous --move
+bind = SUPER_CTRL_ALT, right, exec, hyprnome --move
+
+#-- Misc --
+bind = CTRL SHIFT, R, exec, reload_ags
+bind = SUPER, X, exec, ags -t powermenu
+bind = SUPER, F1, exec, gamemode
+bind = SUPER, C, movetoworkspace, special
+
+#--- Screenshot --
+bindle = ,XF86Launch4, exec, ags -r 'recorder.start()'
+bindle = ,Print, exec, ags -r 'recorder.screenshot()'
+bindle = SHIFT,Print, exec, ags -r 'recorder.screenshot(true)'
+
+#--- Volume --
+bindle = ,XF86AudioLowerVolume, exec, pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindle = ,XF86AudioRaiseVolume, exec, pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindle = ,XF86AudioMute, exec, wpctl set-mute @DEFAULT_SINK@ toggle
+
+#--- Brightness --
+bindle = ,XF86MonBrightnessUp, exec, lightctl up 5
+bindle = ,XF86MonBrightnessDown, exec, lightctl down 5
+
+#--- Mouse Actions --
+bindm = SUPER, mouse:272, movewindow
+bindm = SUPER, mouse:273, resizewindow
+bindm = SUPER ALT, mouse:272, resizewindow
+#+end_src
+** hyprland/plugins.conf
+#+begin_src shell :tangle $HOME/.config/hypr/hyprland/plugins.conf
+plugin {
+  hy3 {
+    tabs {
+      height = 2
+      padding = 6
+      render_text = false
+    }
+    autotile {
+      enable = true
+      trigger_width = 800
+      trigger_height = 500
+    }
+  }
+  overview {
+    autoDrag = true
+    autoScroll = true
+    exitOnClick = true
+    switchOnDrop = true
+  }
+}
+#+end_src
+** hyprland/rules.conf
+#+begin_src shell
+#--- Layerrules
+layerrule = blur,class:^(com.github.Aylur.ags)$
+layerrule = blur,class:^(eww_powermenu)$
+layerrule = blur,class:^(gtk-layer-shell)$
+layerrule = blur,class:^(nwg-drawer)$
+layerrule = blur,class:^(Alacritty)$
+layerrule = blur,class:^(alacritty-dropterm)$
+layerrule = blur,class:^(emacsclient)$
+
+layerrule = animation slide bottom, rofi
+layerrule = animation slide right, swaync-control-center
+layerrule = animation slide, swaync-notification-window
+layerrule = animation fade, hyprpaper
+layerrule = animation fade, swayosd
+layerrule = animation fade, selection
+layerrule = animation slide right, notificationsmenu
+layerrule = animation slide left, dashboardmenu
+
+#--- Animation Rules
+windowrulev2 = animation slide up, class:^(alacritty-dropterm)$
+windowrulev2 = animation slide down, class:^(explorer)$
+windowrulev2 = animation fade, class:^(nwg-drawer)$
+
+#--- Floating Rules
+windowrulev2 = float,class:^(deluge-gtk)$
+windowrulev2 = float,class:^(alacritty-dropterm)$
+windowrulev2 = float,class:^(explorer)$
+windowrulev2 = float,class:^(org.mate.polkit-mate-authentication-agent-1)$
+windowrulev2 = float,class:^(qt5ct)$
+windowrulev2 = float,class:^(qt6ct)$
+windowrulev2 = float,class:^(file_progress)$
+windowrulev2 = float,class:^(confirm)$
+windowrulev2 = float,class:^(dialog)$
+windowrulev2 = float,class:^(download)$
+windowrulev2 = float,class:^(notification)$
+windowrulev2 = float,class:^(error)$
+windowrulev2 = float,class:^(confirmreset)$
+windowrulev2 = float,title:^(Open File)$
+windowrulev2 = float,title:^(branchdialog)$
+windowrulev2 = float,title:^(Confirm to replace files)
+windowrulev2 = float,title:^(File Operation Progress)
+windowrulev2 = float,class:^(com.github.Aylur.ags)$
+windowrulev2 = float,class:^(xdg-desktop-portal)$
+windowrulev2 = float,class:^(xdg-desktop-portal-gtk)$
+windowrulev2 = float,class:^(xdg-desktop-portal-hyprland)$
+windowrulev2 = float, class:(blueman-manager), title:(blueman-manager)
+
+#--- IdleInhibit Rules
+windowrulev2 = idleinhibit focus, class:^(mpv)$
+windowrulev2 = idleinhibit focus, class:^(brave)$, title:^(.*YouTube.*)$
+windowrulev2 = idleinhibit fullscreen, class:^(brave)$
+
+#--- DimAround Rules
+windowrulev2 = dimaround, class:^(gcr-prompter)$
+windowrulev2 = dimaround, class:^(xdg-desktop-portal-gtk)$
+windowrulev2 = dimaround, class:^(xdg-desktop-portal-hyprland)$
+windowrulev2 = dimaround, class:^(org.mate.polkit-mate-authentication-agent-1)$
+
+#--- Opacity Rules
+windowrulev2 = opacity 0.80 0.90,class:^(alacritty-dropterm)$
+windowrulev2 = opacity 0.90 0.90,class:^(explorer)$
+windowrulev2 = opacity 0.80 0.80,class:^(emacsclient)$
+windowrulev2 = opacity 0.80 0.80,class:^(Alacritty)$
+windowrulev2 = opacity 0.95 0.95,class:^(foot)$
+windowrulev2 = opacity 0.90 0.90,class:^(footclient)$
+windowrulev2 = opacity 0.90 0.80,class:^(steamwebhelper)$
+windowrulev2 = opacity 0.90 0.80,class:^(Spotify)$
+windowrulev2 = opacity 0.95 0.95,class:^(Code)$
+windowrulev2 = opacity 0.90 0.90,class:^(Thunar)$
+windowrulev2 = opacity 0.90 0.80,class:^(file-roller)$
+windowrulev2 = opacity 0.80 0.80,class:^(ags)$
+windowrulev2 = opacity 0.90 0.80,class:^(qt5ct)$
+windowrulev2 = opacity 0.90 0.80,class:^(discord)$
+windowrulev2 = opacity 0.90 0.80,class:^(WebCord)$
+windowrulev2 = opacity 0.90 0.70,class:^(pavucontrol)$
+windowrulev2 = opacity 0.90 0.70,class:^(org.mate.polkit-mate-authentication-agent-1)$
+
+#--- Size Rules
+windowrulev2 = size 40% 40%,class:^(deluge-gtk)$
+windowrulev2 = size 40% 20%,class:^(org.mate.polkit-mate-authentication-agent-1)$
+windowrulev2 = size 70% 70%,class:^(foot-dropterm)$
+windowrulev2 = size 90% 90%,class:^(explorer)$
+windowrulev2 = size 40% 40%,class:^(download)$
+windowrulev2 = size 40% 40%,title:^(Open File)$
+windowrulev2 = size 40% 40%,title:^(Save File)$
+windowrulev2 = size 40% 30%,title:^(Volume Control)$
+
+#--- Workspace Rules
+windowrulev2 = workspace special silent,class:^(foot-dropterm)$
+windowrulev2 = workspace special silent,class:^(explorer)$
+
+#--- XwaylandVideoBridge Specific Rules
+windowrulev2 = opacity 0.0 override 0.0 override,class:^(xwaylandvideobridge)$
+windowrulev2 = noanim,class:^(xwaylandvideobridge)$
+windowrulev2 = nofocus,class:^(xwaylandvideobridge)$
+windowrulev2 = noinitialfocus,class:^(xwaylandvideobridge)$
+windowrulev2 = stayfocused, title:^()$,class:^(steam)$
+windowrulev2 = minsize 1 1, title:^()$,class:^(steam)$
+windowrulev2 = stayfocused, title:^()$,class:^(keepassxc)$
+windowrulev2 = minsize 1 1, title:^()$,class:^(keepassxc)$
+
+#--- Misc. Rules
+windowrulev2 = noblur,class:^()$,title:^()$
+#+end_src
+** hyprland/settings.conf
+#+begin_src shell
+general {
+  gaps_in = 7
+  gaps_out = 14
+  border_size = 4
+  col.active_border = rgb(c0caf5)
+  col.inactive_border = rgb(1a1b26)
+  layout = dwindle
+  resize_on_border=true
+  hover_icon_on_border = true
+}
+
+cursor {
+  no_hardware_cursors = true
+}
+
+opengl {
+  nvidia_anti_flicker = false
+}
+
+decoration {
+  rounding = 0
+
+    blur {
+        enabled = true
+        xray = true
+        special = false
+        new_optimizations = true
+        size = 14
+        passes = 4
+        brightness = 1
+        noise = 0.01
+        contrast = 1
+        popups = true
+        popups_ignorealpha = 0.6
+    }
+
+    # Shadow
+    shadow {
+        enabled = true
+        ignore_window = true
+        range = 20
+        offset = 0 2
+        render_power = 4
+        color = rgba(0000002A)
+    }
+
+    # Window Opacities
+    # active_opacity = 1
+    # inactive_opacity = 1
+    # fullscreen_opacity = 1
+
+    # Shader
+    # screen_shader = ~/.config/hypr/shaders/nothing.frag
+    # screen_shader = ~/.config/hypr/shaders/vibrance.frag
+
+    # Dim
+    dim_inactive = false
+    dim_strength = 0.1
+    dim_special = 000000
+}
+
+# decoration {
+#   rounding = 14
+#   active_opacity = 1.0
+#   inactive_opacity = 1.0
+#   fullscreen_opacity = 1.0
+#   blur {
+#     enabled = true
+#     passes = 4
+#     new_optimizations = true
+#     size = 12
+#   }
+#   shadow {
+#     enabled = true
+#     range = 30
+#     render_power = 4
+#     color = rgb(000000)
+#   }
+# }
+
+animations {
+  enabled = yes
+  bezier = quart, 0.25, 1, 0.5, 1
+  animation = windows, 1, 5, quart, slide
+  animation = border, 1, 5, quart
+  animation = borderangle, 1, 5, quart
+  animation = fade, 1, 5, quart
+  animation = workspaces, 1, 5, quart
+}
+
+
+input {
+  kb_layout = us
+  kb_options = ctrl:nocaps
+  follow_mouse = 1
+  touchpad {
+    natural_scroll = 1
+    disable_while_typing = true
+    drag_lock = true
+  }
+  force_no_accel = 0
+  sensitivity = 0
+  natural_scroll = 0
+  float_switch_override_focus = 2
+  numlock_by_default = true
+  accel_profile = flat
+}
+
+gestures {
+  workspace_swipe = true
+  workspace_swipe_fingers = 3
+  workspace_swipe_distance = 300
+  workspace_swipe_invert = true
+  workspace_swipe_min_speed_to_force = 30
+  workspace_swipe_cancel_ratio = 0.5
+  workspace_swipe_create_new = true
+  workspace_swipe_forever = true
+}
+
+dwindle {
+  pseudotile = false
+  force_split = 0
+  preserve_split = true
+  special_scale_factor = 0.97
+  split_width_multiplier = 1.0
+  use_active_for_splits = true
+  default_split_ratio = 1
+}
+
+master {
+  allow_small_split = false
+  special_scale_factor = 0.97
+  mfact = 0.55
+  inherit_fullscreen = true
+}
+
+misc {
+  disable_hyprland_logo = true
+  disable_splash_rendering = false
+  mouse_move_enables_dpms = false
+  always_follow_on_dnd = true
+  layers_hog_keyboard_focus = true
+  animate_manual_resizes = true
+  animate_mouse_windowdragging = true
+  disable_autoreload = false
+  focus_on_activate = true
+  enable_swallow = true
+  swallow_regex = ^(Alacritty|kitty|footclient)$
+  vfr = true
+  vrr = true
+}
+
+render {
+  explicit_sync = true
+}
+#+end_src
+
+* Hyprlock
+#+begin_src shell
+# ~/.config/hypr/hyprlock.conf
+
+# Tokyo Night Night Color Scheme
+$base = rgba(1a1b26ff)
+$mantle = rgba(16161eff)
+$crust = rgba(11111bff)
+
+$text = rgba(c0caf5ff)
+$subtext1 = rgba(a9b1d6ff)
+$subtext0 = rgba(9aa5ceff)
+
+$surface2 = rgba(565f89ff)
+$surface1 = rgba(414868ff)
+$surface0 = rgba(24283bff)
+
+$blue = rgba(7aa2f7ff)
+$lavender = rgba(bb9af7ff)
+$sapphire = rgba(7dcfffff)
+$sky = rgba(7aa2f7ff)
+$teal = rgba(73dacaff)
+$green = rgba(9ece6aff)
+$yellow = rgba(e0af68ff)
+$peach = rgba(f7768eff)
+$red = rgba(f7768eff)
+$mauve = rgba(bb9af7ff)
+
+# General Configuration
+general {
+    disable_loading_bar = true
+    hide_cursor = true
+    grace = 5
+    no_fade_in = false
+}
+
+# Background Configuration with Enhanced Blur
+background {
+    monitor =
+    path = ~/.config/hypr/background.png
+    color = $base
+
+    # Enhanced blur settings
+    blur_passes = 4
+    blur_size = 10
+    blur_new_optimizations = true
+
+    # Additional effects
+    noise = 0.0117
+    contrast = 1.3000
+    brightness = 0.8000
+    vibrancy = 0.2100
+    vibrancy_darkness = 0.0
+
+    # Blur layer behind lockscreen elements
+    blur_xray = true
+}
+
+# Input Field Configuration
+input-field {
+    monitor =
+    size = 250, 50
+    outline_thickness = 3
+    dots_size = 0.33
+    dots_spacing = 0.33
+    dots_center = true
+    outer_color = $surface0
+    inner_color = $mantle
+    font_color = $text
+    fade_on_empty = true
+    placeholder_text = <i>Password...</i>
+    hide_input = false
+    check_color = $green
+    fail_color = $red
+    fail_text = <i>$FAIL ($ATTEMPTS)</i>
+    position = 0, -50
+    halign = center
+    valign = center
+
+    # Add subtle shadow/blur to input field
+    shadow_passes = 2
+    shadow_size = 4
+    shadow_color = rgba(00000088)
+}
+
+# Time Configuration
+label {
+    monitor =
+    text = cmd[update:1000] echo "$(date +"%H:%M")"
+    color = $text
+    font_size = 90
+    font_family = JetBrainsMono Nerd Font
+    position = 0, 200
+    halign = center
+    valign = center
+
+    # Add text shadow for better visibility
+    shadow_passes = 1
+    shadow_size = 3
+    shadow_color = rgba(1a1b2666)
+}
+
+# Date Configuration
+label {
+    monitor =
+    text = cmd[update:10000] echo "$(date +"%A, %d %B %Y")"
+    color = $subtext1
+    font_size = 24
+    font_family = JetBrainsMono Nerd Font
+    position = 0, 140
+    halign = center
+    valign = center
+}
+
+# Greeting Configuration
+label {
+    monitor =
+    text = Hi there, <span foreground="$lavender">$USER</span>!
+    color = $subtext0
+    font_size = 20
+    font_family = JetBrainsMono Nerd Font
+    position = 0, 40
+    halign = center
+    valign = center
+}
+
+# Battery Status (if applicable)
+label {
+    monitor =
+    text = cmd[update:30000] echo "$(acpi -b | awk '{print $4}' | tr -d ',')"
+    color = $peach
+    font_size = 16
+    font_family = JetBrainsMono Nerd Font
+    position = -50, -50
+    halign = right
+    valign = bottom
+}
+
+# Caps Lock Indicator
+label {
+    monitor =
+    text = 
+    color = $red
+    font_size = 24
+    font_family = JetBrainsMono Nerd Font
+    position = 50, -50
+    halign = left
+    valign = bottom
+}
+#+end_src
+
+* Hyprlux
+
+#+begin_src conf
+# ~/.config/hypr/hyprlux.toml
+night_light = { enabled = true, start_time = "20:00", end_time = "20:30", temperature = 3500 }
+
+vibrance_configs = [
+  { window_class = "firefox", window_title = "", strength = 100 },
+  { window_class = "mplayer2", window_title = "Video Player", strength = 100 },
+]
+
+hot_reload = true
+#+end_src
+
+* Hyprpaper
+
+#+begin_src conf
+# ~/.config/hypr/hyprpaper.conf
+splash = off
+ipc = on
+preload = $HOME/.config/hypr/background.png
+wallpaper = HDMI-A-1, $HOME/.config/hypr/background.png
+#+end_src
+
+* Imv
+
+* Kitty
+#+begin_src conf
+# ~/.config/kitty/kitty.conf
+
+#: === Tokyo Night Theme ===
+foreground              #A9B1D6
+background              #1A1B26
+selection_foreground    #1A1B26
+selection_background    #A9B1D6
+
+# Black
+color0                  #32344A
+color8                  #444B6A
+
+# Red
+color1                  #F7768E
+color9                  #F7768E
+
+# Green
+color2                  #9ECE6A
+color10                 #9ECE6A
+
+# Yellow
+color3                  #E0AF68
+color11                 #E0AF68
+
+# Blue
+color4                  #7AA2F7
+color12                 #7AA2F7
+
+# Magenta
+color5                  #BB9AF7
+color13                 #BB9AF7
+
+# Cyan
+color6                  #7DCFFF
+color14                 #7DCFFF
+
+# White
+color7                  #C0CAF5
+color15                 #ACB0D0
+
+# Cursor
+cursor                  #A9B1D6
+cursor_text_color       #1A1B26
+
+#: === Font Settings ===
+font_family             JetBrainsMono Nerd Font
+bold_font              auto
+italic_font            auto
+bold_italic_font       auto
+font_size              12.0
+disable_ligatures      never
+
+#: === Window Settings ===
+window_padding_width   1
+window_margin_width    0
+background_opacity     0.95
+confirm_os_window_close 0
+hide_window_decorations titlebar-only
+
+#: === Tab Bar ===
+tab_bar_style          powerline
+tab_powerline_style    slanted
+tab_title_template     "{title}{' :{}:'.format(num_windows) if num_windows > 1 else ''}"
+active_tab_foreground  #16161E
+active_tab_background  #7AA2F7
+inactive_tab_foreground #A9B1D6
+inactive_tab_background #32344A
+
+#: === Keyboard ===
+kitty_mod              ctrl+shift
+
+# Vim-like pane navigation
+map kitty_mod+h neighboring_window left
+map kitty_mod+l neighboring_window right
+map kitty_mod+k neighboring_window up
+map kitty_mod+j neighboring_window down
+
+# Vim-like tab navigation
+map kitty_mod+[ previous_tab
+map kitty_mod+] next_tab
+
+# Copy/paste
+map kitty_mod+c copy_to_clipboard
+map kitty_mod+v paste_from_clipboard
+
+# Font size
+map kitty_mod+equal    change_font_size all +1.0
+map kitty_mod+minus    change_font_size all -1.0
+map kitty_mod+backspace change_font_size all 0
+
+# Scrollback
+map kitty_mod+g show_last_command_output
+map kitty_mod+e scroll_end
+
+#: === Advanced ===
+shell_integration      enabled
+allow_remote_control   yes
+editor                 nvim
+copy_on_select         yes
+strip_trailing_spaces  smart
+
+#: === Performance ===
+repaint_delay          10
+input_delay            3
+sync_to_monitor        yes
+
+#: === URL Handling ===
+url_color              #7AA2F7
+url_style              single
+open_url_with          xdg-open
+copy_on_select         yes
+
+#: === Mouse ===
+mouse_hide_wait        3.0
+focus_follows_mouse    yes
+
+#: === Cursor Customization ===
+cursor_shape           beam
+cursor_beam_thickness  1.5
+cursor_blink_interval  0.5
+cursor_stop_blinking_after 15.0
+
+wayland_titlebar_color background
+linux_display_server wayland
+#+end_src
+
+* Lazygit
+=Search for errors=
+** Config File
+=~/.config/lazygit/config.yml=
+#+begin_src yaml
+gui:
+  # TokyoNight Night theme
+  theme:
+    lightTheme: false
+    activeBorderColor:
+      - '#7aa2f7'
+      - bold
+    inactiveBorderColor:
+      - '#3b4261'
+    optionsTextColor:
+      - '#7dcfff'
+    selectedLineBgColor:
+      - '#292e42'
+    selectedRangeBgColor:
+      - '#292e42'
+    cherryPickedCommitBgColor:
+      - '#292e42'
+    cherryPickedCommitFgColor:
+      - '#9ece6a'
+    unstagedChangesColor:
+      - '#f7768e'
+    defaultFgColor:
+      - '#a9b1d6'
+    searchingActiveBorderColor:
+      - '#ff9e64'
+
+  # Vim-like keybindings
+  keybinding:
+    universal:
+      quit: 'q'
+      quit-alt1: '<c-c>'
+      return: '<esc>'
+      quitWithoutChangingDirectory: 'Q'
+      togglePanel: '<tab>'
+      prevItem: 'k'
+      nextItem: 'j'
+      prevItem-alt: '<up>'
+      nextItem-alt: '<down>'
+      prevPage: '<c-u>'
+      nextPage: '<c-d>'
+      scrollLeft: 'H'
+      scrollRight: 'L'
+      gotoTop: 'gg'
+      gotoBottom: 'G'
+      startSearch: '/'
+      optionMenu: '?'
+      optionMenu-alt1: ''
+
+    status:
+      checkForUpdate: 'u'
+      recentRepos: '<enter>'
+
+    files:
+      commitChanges: 'c'
+      commitChangesWithoutHook: 'C'
+      amendLastCommit: 'A'
+      commitChangesWithEditor: '<c-o>'
+      ignoreFile: 'i'
+      refreshFiles: 'r'
+      stashAllChanges: 's'
+      viewStashOptions: 'S'
+      toggleStagedAll: 'a'
+      viewResetOptions: 'D'
+      fetch: 'f'
+      toggleTreeView: '`'
+
+    branches:
+      createPullRequest: 'o'
+      viewPullRequestOptions: 'O'
+      checkoutBranch: '<space>'
+      checkoutBranch-alt: 'c'
+      forceCheckoutBranch: 'F'
+      rebaseBranch: 'r'
+      mergeIntoCurrentBranch: 'm'
+      viewBranchOptions: 'M'
+      fastForward: 'f'
+      push: 'P'
+      pull: 'p'
+      renameBranch: 'R'
+      createResetToBranchMenu: 'g'
+      deleteBranch: 'd'
+      copyToClipboard: 'y'
+
+    commits:
+      squashDown: 's'
+      renameCommit: 'r'
+      renameCommitWithEditor: 'R'
+      viewResetOptions: 'g'
+      markCommitAsFixup: 'f'
+      createFixupCommit: 'F'
+      squashAboveCommits: 'S'
+      moveDownCommit: '<c-j>'
+      moveUpCommit: '<c-k>'
+      amendToCommit: 'A'
+      pickCommit: 'p'
+      revertCommit: 't'
+      cherryPickCopy: 'c'
+      cherryPickCopyRange: 'C'
+      pasteCommits: 'v'
+      tagCommit: 'T'
+      checkoutCommit: '<space>'
+      resetCherryPick: '<c-r>'
+      copyCommitAttributeToClipboard: 'y'
+
+    stash:
+      popStash: 'g'
+      applyStash: 'a'
+      viewStashOptions: '<space>'
+      dropStash: 'd'
+
+    commitFiles:
+      checkoutCommitFile: 'c'
+
+    main:
+      toggleDragSelect: 'v'
+      toggleDragSelect-alt: 'V'
+      toggleSelectHunk: 'a'
+      pickBothHunks: 'b'
+      editSelectHunk: 'e'
+      openFile: 'o'
+      openFile-alt: '<space>'
+      openMergeTool: 'M'
+      openDiffTool: 'd'
+      refresh: 'r'
+      stageSelection: 's'
+      unstageSelection: 'u'
+      togglePanel: '<tab>'
+      prevConflict: '<'
+      nextConflict: '>'
+      selectPrevConflict: '['
+      selectNextConflict: ']'
+      undo: 'U'
+      redo: '<c-r>'
+
+    submodules:
+      init: 'i'
+      update: 'u'
+      bulkMenu: 'b'
+      delete: 'd'
+
+    commitMessage:
+      confirm: '<enter>'
+      switchToEditor: '<c-o>'
+
+git:
+  paging:
+    colorArg: always
+    pager: delta --dark --paging=never
+
+os:
+  editCommand: nvim
+  editCommandTemplate: '{{editor}} "{{filename}}"'
+  openCommand: xdg-open
+
+customCommands:
+  - key: 'e'
+    command: 'git commit --amend --no-edit'
+    context: 'commits'
+    description: 'Amend commit without editing message'
+  - key: 'E'
+    command: 'nvim -c "Gedit {{commitHash}}:"'
+    context: 'commits'
+    description: 'Edit commit in Neovim'
+  - key: 'n'
+    command: 'nvim {{filename}}'
+    context: 'files'
+    description: 'Open file in Neovim'
+  - key: 'N'
+    command: 'nvim +"Gedit {{branchName}}:"'
+    context: 'branches'
+    description: 'Open branch in Neovim fugitive'
+
+notARepository: skip
+disableStartupPopups: true
+#+end_src
+
+** Zsh
+#+begin_src shell :tangle $HOME/.config/zsh/lazygit.zsh
+# Optimize lazygit for Gentoo
+export LAZYGIT_USE_SYSTEM_GIT=1
+export LAZYGIT_NEW_DIR_FILE=~/.local/share/lazygit/newdir
+#+end_src
+
+#+RESULTS:
+
+* Man Pages
+
+* Mpv
+
+* Nwg-drawer
+
+* Nwg-menu
+
+* Pyprland
+#+begin_src shell
+# ~/.config/hypr/pyprland.toml
+[pyprland]
+plugins = ["scratchpads"]
+
+[scratchpads.term]
+command = "kitty --class kitty-dropterm"
+class = "kitty-float"
+size = "70% 70%"
+margin = 50
+animation = "fromTop"
+unfocus = "hide"
+
+[scratchpads.tuifm]
+command = "alacritty --class explorer -e yazi"
+class = "explorer"
+size = "90% 90%"
+margin = 50
+animation = "fromBottom"
+unfocus = "hide"
+
+[scratchpads.tuigit]
+command = "kitty --class git-terminal -e lazygit"
+class = "thunar"
+size = "80% 80%"
+margin = 50
+animation = "fromTop"
+unfocus = "hide"
+#+end_src
+
+* Ripgrep
+
+* Sddm
+
+* Starship
+=search for errors=
+** config
+=$HOME/.config/starship/starship.toml=
+#+begin_src shell
+# Tokyo Night color scheme
+[palette]
+background = "#1a1b26"
+foreground = "#c0caf5"
+selection = "#33467c"
+comment = "#565f89"
+blue = "#7aa2f7"
+cyan = "#7dcfff"
+green = "#9ece6a"
+magenta = "#bb9af7"
+red = "#f7768e"
+yellow = "#e0af68"
+black = "#15161e"
+white = "#a9b1d6"
+orange = "#ff9e64"
+pink = "#f7768e"
+purple = "#9d7cd8"
+
+# Main configuration
+[character]
+success_symbol = "[❯](bold $green)"
+error_symbol = "[❯](bold $red)"
+vicmd_symbol = "[❮](bold $blue)"
+
+[directory]
+truncation_length = 3
+truncate_to_repo = false
+style = "bold $blue"
+read_only_style = "bold $red"
+read_only = " "
+
+[git_branch]
+symbol = " "
+style = "bold $magenta"
+format = "on [$symbol$branch]($style) "
+
+[git_status]
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+stashed = "≡"
+modified = "!"
+untracked = "?"
+deleted = "✘"
+renamed = "»"
+style = "bold $green"
+format = "[$all_status$ahead_behind]($style) "
+
+[git_state]
+rebase = "REBASING"
+merge = "MERGING"
+revert = "REVERTING"
+cherry_pick = "CHERRY-PICKING"
+bisect = "BISECTING"
+am = "AM"
+am_or_rebase = "AM/REBASE"
+style = "bold $yellow"
+format = "\([$state( $progress_current/$progress_total)]($style)\) "
+
+[package]
+format = "[$symbol$version]($style) "
+symbol = " "
+style = "bold $blue"
+
+# Gentoo-specific optimizations
+[status]
+symbol = "✗"
+success_symbol = "✓"
+style = "bold $green"
+format = "[$symbol $common_meaning$signal_name]($style) "
+disabled = false
+
+[cmd_duration]
+min_time = 1000
+format = "took [$duration]($style) "
+style = "bold $yellow"
+
+[memory_usage]
+disabled = false
+threshold = 75
+symbol = "🐏"
+style = "bold $orange"
+
+[env_var]
+variable = "WSL_DISTRO_NAME"
+format = "via [$env_value]($style) "
+style = "bold $green"
+
+# Language support modules
+[aws]
+symbol = "  "
+style = "bold $yellow"
+
+[azure]
+symbol = "ﴃ "
+style = "bold $blue"
+
+[bun]
+symbol = " "
+style = "bold $green"
+
+[c]
+symbol = " "
+style = "bold $blue"
+
+[cmake]
+symbol = "喝 "
+style = "bold $blue"
+
+[cobol]
+symbol = "⚙️ "
+style = "bold $blue"
+
+[dart]
+symbol = " "
+style = "bold $blue"
+
+[deno]
+symbol = "🦕 "
+style = "bold $green"
+
+[docker_context]
+symbol = " "
+style = "bold $blue"
+
+[elixir]
+symbol = " "
+style = "bold $magenta"
+
+[elm]
+symbol = " "
+style = "bold $blue"
+
+[gcloud]
+symbol = " "
+style = "bold $blue"
+
+[golang]
+symbol = " "
+style = "bold $blue"
+
+[helm]
+symbol = "⎈ "
+style = "bold $blue"
+
+[java]
+symbol = " "
+style = "bold $red"
+
+[julia]
+symbol = " "
+style = "bold $magenta"
+
+[kotlin]
+symbol = " "
+style = "bold $blue"
+
+[lua]
+symbol = " "
+style = "bold $blue"
+
+[nodejs]
+symbol = " "
+style = "bold $green"
+
+[ocaml]
+symbol = "🐫 "
+style = "bold $yellow"
+
+[perl]
+symbol = " "
+style = "bold $blue"
+
+[php]
+symbol = " "
+style = "bold $blue"
+
+[pulumi]
+symbol = " "
+style = "bold $yellow"
+
+[python]
+symbol = " "
+style = "bold $blue"
+
+[ruby]
+symbol = " "
+style = "bold $red"
+
+[rust]
+symbol = " "
+style = "bold $red"
+
+[scala]
+symbol = " "
+style = "bold $red"
+
+[swift]
+symbol = "ﯣ "
+style = "bold $yellow"
+
+[terraform]
+symbol = "行 "
+style = "bold $magenta"
+
+[zig]
+symbol = " "
+style = "bold $yellow"
+
+# Gentoo-specific optimizations
+[gentoo_use]
+format = "[$symbol($count)]($style) "
+symbol = "󰣨 "
+style = "bold $blue"
+threshold = 1
+
+[gentoo_portage]
+format = "[$symbol($count)]($style) "
+symbol = "󰣨 "
+style = "bold $magenta"
+threshold = 1
+
+# Line breaks and spacing
+[line_break]
+disabled = false
+
+[container]
+symbol = "⬢"
+style = "bold $blue"
+format = "[$symbol]($style) "
+
+[username]
+style_user = "bold $blue"
+style_root = "bold $red"
+format = "[$user]($style) "
+disabled = false
+show_always = true
+
+[hostname]
+ssh_only = false
+format = "@[$hostname]($style) "
+trim_at = ".local"
+style = "bold $green"
+
+[time]
+disabled = false
+format = "[$time]($style) "
+time_format = "%T"
+utc_time_offset = "local"
+style = "bold $comment"
+#+end_src
+
+** zsh
+#+begin_src shell
+# Enable Starship
+eval "$(starship init zsh)"
+
+# Optimize Git for Gentoo
+export GIT_OPTIONAL_LOCKS=0
+
+# Faster git status (disable for large repos)
+function git_prompt_info() {
+  if [[ -n "$(_git_cached)" ]]; then
+    echo "$(_git_cached)"
+  fi
+}
+
+# Gentoo-specific optimizations
+alias emerge='nocorrect emerge'
+alias ebuild='nocorrect ebuild'
+alias equery='nocorrect equery'
+
+# Cache completions
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.zsh/cache
+
+# Preload starship
+if [[ "$TERM" != "linux" ]]; then
+  starship_precmd() {
+    PS1="$(starship prompt --terminal-width=$COLUMNS --keymap=${KEYMAP:-} --status=$STATUS --jobs=${#jobstates[@]})"
+  }
+  starship_preexec() {
+    TIMER=${TIMER:-$SECONDS}
+  }
+  starship_precmd
+  add-zsh-hook precmd starship_precmd
+  add-zsh-hook preexec starship_preexec
+fi
+#+end_src
+
+* Tealdeer
+
+* Thefuck
+
+* Yazi
+
+* Zathura
+
+* Zoxide
+
+* Zsh

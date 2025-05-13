@@ -58,13 +58,35 @@
 - [ ] crafted-writing-packages
 
 
+# Integrate the following comments into doom emacs
+1. ___Write an org-mode configuration for doom emacs using the built-in org-mode in emacs with org-mode optimizations and the following features and integrations___:
+    - org file directory is in $home/org along with all other org-mode related files; 
+    - extensive org headlines configuration with variable font size with each level of header, fonts using jetbrainsmono nerd font bold fonts for all headlines; 
+    - prettify source code blocks with ligatures and icons; 
+    - all org files start in the overview mode; 
+    - comprehesive org-agenda setup including integrations with org-super-agenda;
+    - comprehensive org-modern configuration with optimizations and integrations throughout the whole configuration and also include integrations with org-super-agenda, org-fragtog, org-download, org headlines and have custom org stars; use org-modern-table instead of a custom configuration;
+    - org-fancy-priorities configuration with integration into org-modern
+    - comprehensive org-todo configuration with ligatures and unicode integrated into org todo keywords
+    - make sure org-ellipses integrates well with org-modern stars
+    - have support for pretty tables in org files
+    - seamless integrations writing in bold, italic and underline texts
+    - comprehensive setup for writing latex in org-mode files and integrating the setup into a reference management system that includes support for multiple .bib files. Also integrate the latex setup with zotero to review the attached sources in .bib files. Use tectonic from https://github.com/tectonic-typesetting/tectonic for latex setupUse tectonic from https://github.com/tectonic-typesetting/tectonic for latex setup 
+    - have doom tokyo-night theme integration throughtout the configuration
+    - org-roam v2 configuration with the following features and integrations: features that are inspired by The Brain in https://thebrain.com/; keybindings that follow doom-emacs-like bindings; quality-of-life features and improvements; advance visualizations; obsidian-like features; don't follow obsidian keybindings;; denote related files are inside the org directory; additional quality-of-life features and improvements
+    - comprehensive org-noter configuration that integrates well with org-roam v2
+    - do not include any redundant configuration options already present in doom emacs
+  ___Then integrate all the parts of the configuration to provide a seamless experience to write scientific documents in org mode.___
+
+
+
 [!Note] Add org-mode after seeing crafted-emacs config, write part about org configuration with org-appear, org-modern, denote, org-fragtog
 Write a state-of-the-art emacs 30 configuration in org-mode that will be tangled to init.el with the following features, properties and integrations:
   - divide the whole org file into sensible titles and respectives emacs-lisp org source code blocks with integration between the source code blocks for their respective configurations
   - optimize emacs startup time and optimize the whole configuration where possible. all packages must be lazy loaded like neovim wherever possible.
   - use emacs built-in package manager both emacs repos and pulling from git repos; do not use straight package manager or any other package manager for emacs
   - aggressive emacs optimizations to the configuration wherever possible
-  - comprehensive catppuccin mocha theme integration throughout the configuration and wherever possible
+  - comprehensive doom tokyo-night theme integration throughout the configuration and wherever possible
   - setup automatic package update
   - comprehensive keybindings configuration with doom emacs-like and spacemacs-like bindings and vim bindings integration using the general emacs package. Vim keybindings must not clash with the doom emacs-like or spacemacs-like keybindings
   - minimal ui along with zen mode integration 
@@ -110,7 +132,7 @@ Write a state-of-the-art emacs 30 configuration in org-mode that will be tangled
   - comprehensive and state-of-the-art configuration for org-mode using the built-in org-mode in emacs with org-mode optimizations and the following features and integrations: do not pull org package from any emacs sources, instead use the built-in org-mode that comes with emacs 30; quality of features and improvements; do not setup org-roam(v1,2), org-noter or org-brain throughout the emacs 30 configuration; org file directory is in $HOME/org along with all other org-mode related files; extensive org headlines configuration with variable font size with each level of header, catppuccin mocha theme integrations, fonts using JetBrainsMono Nerd Font bold fonts for all headlines; prettify source code blocks with ligatures and icons; all org files start in the overview mode; comprehensive org babel configuration with support for python, shell, emacs-lisp and conf-unix; comprehensive org structure templates configuration with support for python, shell, emacs-lisp and conf-unix; comprehesive org-agenda setup including integrations with org-super-agenda; comprehensive org-todo configuration following exactly from the doom emacs project including the default keybindings, and default keywords, and integrates with org-super-agenda and org-modern; comprehensive org-fragtog and org-download integration; pomodoro integration for tasks; doom emacs-like capture templates; comprehensive org-modern configuration with optimizations and integrations throughout the whole configuration and also include integrations with org-super-agenda, org-fragtog, org-download, org headlines and have custom org stars; org-fancy-priorities configuration with integration into org-modern; setup a binary or python script for org-capture similar to the doom emacs project; seamless integrations writing in bold, italic and underline texts, as well as url and highlighted texts in org mode
   - extensive hl-todo configuration that integration with org-modern and keybindings follows spacemacs like format
   - autopair setup for types of brackets except for the delimiter "<" inside a org file
-  - comprehensive and state-of-the-art denote configuration with the following features and integrations: mimics org-roam version 2 and includes many of its features; integrations throughout the whole configuration; features that are inspired by The Brain in https://thebrain.com/; keybindings that follow spacemacs-like bindings; quality-of-life features and improvements; naming schemes follow org-roam version 2 format; advance visualizations; obsidian-like features; don't follow obsidian keybindings; denote extensions and denote menu integrations; org-noter like features; denote related files are inside the org directory; additional quality-of-life features and improvements
+  - comprehensive and state-of-the-art denote configuration with the following features and integrations: mimics org-roam version 2 and includes many of its features; integrations throughout the whole configuration; features that are inspired by The Brain in https://thebrain.com/; keybindings that follow doom-emacs-like bindings; quality-of-life features and improvements; naming schemes follow org-roam version 2 format; advance visualizations; obsidian-like features; don't follow obsidian keybindings; denote extensions and denote menu integrations; org-noter like features; denote related files are inside the org directory; additional quality-of-life features and improvements
   - setup a binary or python script for having features like doom doctor and doom sync from the doom emacs project for the emacs 30 configuration
   - comprehensive and state-of-the-art python programming configuration that includes eglot integration, treesitters, formatters, linters, and dap and integrates all these features into org-mode so that python programming in an org file has support for eglot, treesitters, formatters, linters, dap and all other features inside org source code blocks so that python programming in org-mode is seamless. The configuration must include comprehensive support for programming in jupyter using the emacs-jupyter package inside org mode. Org's structure templates for python must include the shebang argument '#!/usr/bin/env python'
   - comprehesive projectile configuration with support for various programming languages and integrates into ibuffer if possible
