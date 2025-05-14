@@ -47,6 +47,7 @@
 - [ ] Emacs Writing Studio
 - [ ] Doom Emacs
 - [ ] Scimax
+- [ ] SqrtMinusOne
 - [ ] https://github.com/emacs-tw/awesome-emacs
 
 # Crafted Emacs
