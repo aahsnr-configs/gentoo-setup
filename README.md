@@ -248,11 +248,11 @@ make -j10 LLVM=1 KCFLAGS="-O3 -march=native -pipe -flto=thin -fno-math-errno -fn
 ``````
 
 ``````sh
-make modules_install -j14 llvm=1 KCFLAGS="-o3 -march=native -pipe -flto=thin -fno-math-errno -fno-signed-zeros -fno-trapping-math -fcf-protection -d_fortify_source=3 -d_glibcxx_assertions -fstack-protector-strong -fstack-clash-protection -fplugin=llvmpolly.so -mllvm=-polly -mllvm=-polly-vectorizer=stripmine -mllvm=-polly-omp-backend=llvm -mllvm=-polly-parallel -mllvm=-polly-num-threads=9 -mllvm=-polly-scheduling=dynamic"
+emerge x11-drivers/nvidia-drivers gui-libs/egl-wayland gui-libs/egl-gbm gui-libs/egl-x11 media-libs/nvidia-vaapi-driver sys-process/nvtop x11-drivers/xf86-video-amdgpu
 ``````
 
 ``````sh
-emerge x11-drivers/nvidia-drivers gui-libs/egl-wayland gui-libs/egl-gbm gui-libs/egl-x11 media-libs/nvidia-vaapi-driver sys-process/nvtop x11-drivers/xf86-video-amdgpu
+make modules_install -j14 llvm=1 KCFLAGS="-O3 -march=native -pipe -flto=thin -fno-math-errno -fno-signed-zeros -fno-trapping-math -fcf-protection -d_fortify_source=3 -d_glibcxx_assertions -fstack-protector-strong -fstack-clash-protection -fplugin=llvmpolly.so -mllvm=-polly -mllvm=-polly-vectorizer=stripmine -mllvm=-polly-omp-backend=llvm -mllvm=-polly-parallel -mllvm=-polly-num-threads=9 -mllvm=-polly-scheduling=dynamic"
 ``````
 
 ``````sh
