@@ -692,6 +692,8 @@ swapon /dev/vg0/swap
 
 - esearch esearch -I emacs #list all installed emacs packages 
 
+- :shebang #!/usr/bin/env bash
+
 - PY_CFLAGS:
 python3 -c "import sysconfig; print(sysconfig.get_config_var('PY_CFLAGS') + sysconfig.get_config_var('PY_CFLAGS_NODIST'))"
 

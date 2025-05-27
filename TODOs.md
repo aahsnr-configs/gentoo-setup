@@ -110,9 +110,7 @@
   - [ ] zsh
 
 
-
-
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+--------------------------------------------------
 
 # DEEPSEEK MD
 [!Note]: For all the deepseek created configs, systemd units and scripts, make sure all of them are working
