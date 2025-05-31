@@ -697,4 +697,6 @@ swapon /dev/vg0/swap
 - PY_CFLAGS:
 python3 -c "import sysconfig; print(sysconfig.get_config_var('PY_CFLAGS') + sysconfig.get_config_var('PY_CFLAGS_NODIST'))"
 
+- find / -name ".git"
+
 
