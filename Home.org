@@ -1,12 +1,10 @@
 #+title: Home Configuration
 #+PROPERTY: mkdirp: yes
-* Write :tangle paths after finishing particular modules
-
-* Atuin
+* TODO Atuin
 
 ** Systemd Units
 
-#+begin_src sh :tangle $HOME/.config/systemd/user/atuin.service
+#+begin_src shell :tangle $HOME/.config/systemd/user/atuin.service
 [Unit]
 Description=Atuin Shell History
 Documentation=https://atuin.sh/docs
@@ -38,7 +36,7 @@ NoNewPrivileges=true
 WantedBy=default.target
 #+end_src
 
-#+begin_src sh :tangle $HOME/.config/systemd/user/atuin-maintenance.timer
+#+begin_src shell :tangle $HOME/.config/systemd/user/atuin-maintenance.timer
 [Unit]
 Description=Daily Atuin Database Maintenance
 
@@ -50,7 +48,7 @@ Persistent=true
 WantedBy=timers.target
 #+end_src
 
-#+begin_src sh :tangle $HOME/.config/systemd/user/atuin-maintenance.service
+#+begin_src shell :tangle $HOME/.config/systemd/user/atuin-maintenance.service
 [Unit]
 Description=Atuin Database Maintenance
 After=network.target
@@ -61,7 +59,7 @@ ExecStart=/usr/bin/atuin db compact
 ExecStart=/usr/bin/atuin db optimize
 #+end_src
 
-** Zsh
+** TODO Zsh
 #+begin_src sh :tangle $HOME/.config/zsh/atuin.zsh
 # Atuin initialization
 eval "$(atuin init zsh --disable-up-arrow)"
@@ -142,7 +140,7 @@ vim_mode = true
 #+end_src
 
 
-* Bat
+* TODO Bat
 ** Configuration
 #+begin_src sh :tangle $HOME/.config/bat/config
 # ~/.config/bat/config
@@ -192,7 +190,7 @@ vim_mode = true
 #+end_src
 
 
-** Zsh
+** TODO Zsh
 #+begin_src sh :tangle $HOME/.config/zsh/bat.zsh
 # BAT configuration
 export BAT_THEME="Catppuccin-mocha"
@@ -604,7 +602,7 @@ sorting-method:                  "fzf";
 #+end_src
 
 
-* Eza
+* TODO Eza
 ** Configuration
 
 #+begin_src yaml
@@ -757,7 +755,7 @@ git:
   recurse: false
   ignore: true
 #+end_src
-** Zsh
+** TODO Zsh
 #+begin_src sh :tangle $HOME/.config/zsh/eza.zsh
 # Optimized eza aliases
 alias ls='eza --view=default --icons=auto-fallback --color=auto'
@@ -779,10 +777,10 @@ mkdir -p "$(dirname "$EZA_GIT_DIR_CACHE")"
 
 * Fastfetch
 
-* Fzf
-** zsh
+* TODO Fzf
+** TODO zsh
 
-#+begin_src sh
+#+begin_src shell
 # FZF configuration for Gentoo with Catppuccin Mocha
 export FZF_DEFAULT_OPTS="
 --height 40% --layout=reverse --border
@@ -839,6 +837,8 @@ function fzf_gentoo_packages_widget() {
 }
 zle -N fzf_gentoo_packages_widget
 bindkey '^p' fzf_gentoo_packages_widget
+
+source ~/.config/fzf/fzf.gentoo
 #+end_src
 
 ** ~/.config/fzf/fzf.gentoo
@@ -1535,7 +1535,7 @@ wallpaper = HDMI-A-1, $HOME/.config/hypr/background.png
 
 * Imv
 
-#+begin_src ini
+#+begin_src shell :tangle $HOME/.config/imv/config
 # ~/.config/imv/config
 
 # ======================
@@ -1635,58 +1635,58 @@ preferred_loader = libjpeg-turbo,libpng,libtiff,librsvg
 #+begin_src shell :tangle $HOME/.config/kitty/kitty.conf
 # ~/.config/kitty/kitty.conf
 
-#: === Tokyo Night Theme ===
-foreground              #A9B1D6
-background              #1A1B26
-selection_foreground    #1A1B26
-selection_background    #A9B1D6
+#: === Catppuccin Mocha Theme ===
+foreground              #CDD6F4
+background              #1E1E2E
+selection_foreground    #1E1E2E
+selection_background    #F5E0DC
 
 # Black
-color0                  #32344A
-color8                  #444B6A
+color0                  #45475A
+color8                  #585B70
 
 # Red
-color1                  #F7768E
-color9                  #F7768E
+color1                  #F38BA8
+color9                  #F38BA8
 
 # Green
-color2                  #9ECE6A
-color10                 #9ECE6A
+color2                  #A6E3A1
+color10                 #A6E3A1
 
 # Yellow
-color3                  #E0AF68
-color11                 #E0AF68
+color3                  #F9E2AF
+color11                 #F9E2AF
 
 # Blue
-color4                  #7AA2F7
-color12                 #7AA2F7
+color4                  #89B4FA
+color12                 #89B4FA
 
 # Magenta
-color5                  #BB9AF7
-color13                 #BB9AF7
+color5                  #F5C2E7
+color13                 #F5C2E7
 
 # Cyan
-color6                  #7DCFFF
-color14                 #7DCFFF
+color6                  #94E2D5
+color14                 #94E2D5
 
 # White
-color7                  #C0CAF5
-color15                 #ACB0D0
+color7                  #BAC2DE
+color15                 #A6ADC8
 
 # Cursor
-cursor                  #A9B1D6
-cursor_text_color       #1A1B26
+cursor                  #F5E0DC
+cursor_text_color       #1E1E2E
 
 #: === Font Settings ===
 font_family             JetBrainsMono Nerd Font
 bold_font              auto
 italic_font            auto
 bold_italic_font       auto
-font_size              12.5
+font_size              12.0
 disable_ligatures      never
 
 #: === Window Settings ===
-window_padding_width   0
+window_padding_width   1
 window_margin_width    0
 background_opacity     0.95
 confirm_os_window_close 0
@@ -1696,10 +1696,10 @@ hide_window_decorations titlebar-only
 tab_bar_style          powerline
 tab_powerline_style    slanted
 tab_title_template     "{title}{' :{}:'.format(num_windows) if num_windows > 1 else ''}"
-active_tab_foreground  #16161E
-active_tab_background  #7AA2F7
-inactive_tab_foreground #A9B1D6
-inactive_tab_background #32344A
+active_tab_foreground  #1E1E2E
+active_tab_background  #CBA6F7
+inactive_tab_foreground #CDD6F4
+inactive_tab_background #181825
 
 #: === Keyboard ===
 kitty_mod              ctrl+shift
@@ -1729,19 +1729,18 @@ map kitty_mod+e scroll_end
 
 #: === Advanced ===
 shell_integration      enabled
-# allow_remote_control   yes
+allow_remote_control   yes
 editor                 nvim
-# copy_on_select         yes
-# strip_trailing_spaces  smart
+copy_on_select         yes
+strip_trailing_spaces  smart
 
 #: === Performance ===
-repaint_delay          2
-input_delay            0
-sync_to_monitor        no
-wayland_enable_ime     no
+repaint_delay          10
+input_delay            3
+sync_to_monitor        yes
 
 #: === URL Handling ===
-url_color              #7AA2F7
+url_color              #89B4FA
 url_style              single
 open_url_with          xdg-open
 copy_on_select         yes
@@ -1760,20 +1759,9 @@ wayland_titlebar_color background
 linux_display_server wayland
 #+end_src
 
-#+begin_src shell :shebang #!/usr/bin/env bash
-# Kitty session script - save with: kitty +kitten session save <name>
-if [ "$1" = "save" ]; then
-	kitty +kitten session save "$2"
-elif [ "$1" = "restore" ]; then
-	kitty +kitten session restore "$2"
-else
-	echo "Usage: session [save|restore] <name>"
-fi
-#+end_src
-
 * Lazygit
 =~/.config/lazygit/config.yml=
-#+begin_src yaml
+#+begin_src shell :tangle $HOME/.config/lazygit/config.yml
 gui:
   theme:
     lightTheme: false
@@ -1934,9 +1922,9 @@ notARepository: skip
 disableStartupPopups: true
 #+end_src
 
-* Man Pages
-** Core Configuration (=/etc/man_db.conf=)
-#+begin_src conf
+* TODO Man Pages
+** Core Configuration
+#+begin_src conf :tangle /etc/man_db.conf
 # Optimized man_db.conf for Gentoo Linux with Catppuccin Mocha theming
 
 # System paths - optimized for Gentoo
@@ -1984,7 +1972,7 @@ MANDATORY_MANPATH /usr/share/man
 
 ** Catppuccin Mocha Theme Integration
 =/etc/groff/grofferrc=:
-#+begin_src conf
+#+begin_src shell :tangle /etc/groff/grofferrc
 # Catppuccin Mocha theme for man pages
 .defcolor base      rgb #1e1e2e
 .defcolor text      rgb #cdd6f4
@@ -2018,8 +2006,8 @@ MANDATORY_MANPATH /usr/share/man
 .\}
 #+end_src
 
-** Zsh
-#+begin_src zsh
+** TODO Zsh
+#+begin_src zsh :tangle $HOME/.config/zsh/man.zsh
 # Enhanced man page support for Zsh
 export MANPAGER="less -R --use-color -Dd+r -Du+b -Dk+Y -DM +Gg"
 
@@ -2156,7 +2144,7 @@ animation = "fromTop"
 unfocus = "hide"
 #+end_src
 
-* Ripgrep
+* TODO Ripgrep
 ** Configuration
 #+begin_src sh
 # =~/.config/ripgrep/ripgreprc
@@ -2210,8 +2198,8 @@ unfocus = "hide"
 --text
 #+end_src
 
-** Zsh
-#+begin_src sh
+** TODO Zsh
+#+begin_src shell :tangle $HOME/.config/zsh/ripgrep.zsh
 # Ripgrep integration with fzf and bat preview
 if command -v rg &>/dev/null; then
     # Enhanced rg search with preview
@@ -2275,7 +2263,7 @@ sudo emerge -av \
     app-misc/jq
 #+end_src
 
-**  Scripts
+** Scripts
 =~/.local/bin/rg-gentoo=:
 #+begin_src sh
 #!/bin/bash
@@ -2312,9 +2300,9 @@ case "$1" in
 esac
 #+end_src
 
-* Starship
+* TODO Starship
 ** =~/.config/starship.toml=
-#+begin_src toml
+#+begin_src shell :tangle $HOME/.config/starship.toml
 # Tokyo Night color scheme
 [palette]
 background = "#1a1b26"
@@ -2567,8 +2555,8 @@ utc_time_offset = "local"
 style = "bold $comment"
 #+end_src
 
-** Zsh
-#+begin_src sh
+** TODO Zsh
+#+begin_src shell :tangle $HOME/.config/zsh/starship.zsh
 # Enable Starship
 eval "$(starship init zsh)"
 
@@ -2589,17 +2577,483 @@ zstyle ':completion:*' cache-path ~/.zsh/cache
 #+end_src
 
 * Tmux
+#+begin_src shell :tangle $HOME/.tmux.conf
+# ~/.tmux.conf
+# Requirements: TPM, Nerd Fonts, wl-clipboard/xclip
+
+# ======================
+# Security Configuration
+# ======================
+set -g lock-after-time 900
+set -g lock-command "loginctl lock-session"
+set -g visual-activity off
+set -g visual-bell off
+set -g visual-silence off
+set -g escape-time 50
+set -g window-style 'fg=default,bg=terminal'
+set -g window-active-style 'fg=default,bg=terminal'
+set -g -a terminal-overrides ',*:Ss=\E[%p1%d q:Se=\E[2 q'
+
+# ======================
+# Performance Optimizations
+# ======================
+set -g buffer-limit 50
+set -g monitor-activity off
+set -g monitor-silence 0
+set -g repeat-time 500
+set -g status-interval 15
+set -g default-terminal "tmux-256color"
+set -ga terminal-overrides ",*256col*:RGB"
+
+# ======================
+# Plugin Configuration
+# ======================
+set -g @tpm-clean 'on'
+set -g @tpm-interval 15
+
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+set -g @plugin 'tmux-plugins/tmux-continuum'
+set -g @plugin 'christoomey/vim-tmux-navigator'
+set -g @plugin 'tmux-plugins/tmux-yank'
+set -g @plugin 'joshmedeski/tmux-nerd-font-window-name'
+
+set -g @resurrect-capture-pane-contents 'off'
+set -g @resurrect-processes 'ssh psql pgcli mysql sqlite3'
+set -g @resurrect-save-bash-history 'off'
+set -g @continuum-restore 'on'
+set -g @continuum-save-interval '10'
+
+# ======================
+# Catppuccin Mocha Colorscheme
+# ======================
+set -g @catppuccin_base "#1e1e2e"
+set -g @catppuccin_text "#cdd6f4"
+set -g @catppuccin_red "#f38ba8"
+set -g @catppuccin_peach "#fab387"
+set -g @catppuccin_yellow "#f9e2af"
+set -g @catppuccin_green "#a6e3a1"
+set -g @catppuccin_blue "#89b4fa"
+set -g @catppuccin_mauve "#cba6f7"
+set -g @catppuccin_teal "#94e2d5"
+set -g @catppuccin_lavender "#b4befe"
+set -g @catppuccin_mantle "#181825"
+set -g @catppuccin_surface0 "#313244"
+
+set -g pane-active-border-style "fg=#{@catppuccin_blue},bg=default"
+set -g pane-border-style "fg=#{@catppuccin_mantle},bg=default"
+set -g message-style "fg=#{@catppuccin_text},bg=#{@catppuccin_mantle}"
+set -g message-command-style "fg=#{@catppuccin_text},bg=#{@catppuccin_mantle}"
+
+# ======================
+# Key Bindings & Navigation
+# ======================
+unbind C-b
+set -g prefix C-a
+bind C-a send-prefix
+
+bind -n M-h select-pane -L
+bind -n M-j select-pane -D
+bind -n M-k select-pane -U
+bind -n M-l select-pane -R
+
+is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
+    | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
+bind-key -n 'C-h' if-shell "$is_vim" 'send-keys C-h' 'select-pane -L'
+bind-key -n 'C-j' if-shell "$is_vim" 'send-keys C-j' 'select-pane -D'
+bind-key -n 'C-k' if-shell "$is_vim" 'send-keys C-k' 'select-pane -U'
+bind-key -n 'C-l' if-shell "$is_vim" 'send-keys C-l' 'select-pane -R'
+
+bind -r H resize-pane -L 5
+bind -r J resize-pane -D 5
+bind -r K resize-pane -U 5
+bind -r L resize-pane -R 5
+bind '>' swap-pane -D
+bind '<' swap-pane -U
+
+# ======================
+# Status Bar Configuration
+# ======================
+set -g status on
+set -g status-justify left
+set -g status-position bottom
+set -g status-left-length 100
+set -g status-right-length 100
+
+set -g @pl_sep_right ""
+set -g @pl_sep_left ""
+
+set -g status-left "#[fg=#{@catppuccin_mantle},bg=#{@catppuccin_blue}]#{@pl_sep_left}\
+#[fg=#{@catppuccin_text},bg=#{@catppuccin_mantle}] #S #[fg=#{@catppuccin_mantle},bg=#{@catppuccin_blue}]#{@pl_sep_right}"
+
+set -g status-right "#[fg=#{@catppuccin_blue},bg=#{@catppuccin_mantle}]#{@pl_sep_left}\
+#[fg=#{@catppuccin_text},bg=#{@catppuccin_mantle}] %H:%M #[fg=#{@catppuccin_mantle},bg=#{@catppuccin_blue}]#{@pl_sep_right}"
+
+set -g window-status-format "#[fg=#{@catppuccin_text},bg=#{@catppuccin_mantle}] #I:#W "
+set -g window-status-current-format "#[fg=#{@catppuccin_blue},bg=#{@catppuccin_mantle}] 󰮯 #I:#W "
+
+# ======================
+# Clipboard Integration
+# ======================
+set -g @yank_with_mouse off
+set -g @yank_selection_mouse 'clipboard'
+
+if-shell "test -n $WAYLAND_DISPLAY" {
+    set -g @yank_selection 'clipboard'
+    set -g @yank_action 'copy-pipe-no-clear wl-copy -n'
+} {
+    set -g @yank_selection 'clipboard'
+    set -g @yank_action 'copy-pipe-no-clear xclip -in -selection clipboard'
+}
+
+# ======================
+# Security Features
+# ======================
+set -g destroy-unattached off
+set -g detach-on-destroy on
+set -g update-environment ""
+set -g default-command "${SHELL} -l"
+set -g default-shell "/bin/bash"
+set -g allow-rename off
+set -g automatic-rename off
+set -g remain-on-exit off
+set -g pane-deny-action 'kill-pane -t'
+set -g window-size latest
+
+# ======================
+# Quality of Life
+# ======================
+set -g aggressive-resize on
+set -g bell-action none
+set -g bell-on-alert off
+set -g history-file ~/.tmux_history
+set -g backspace 'C-?'
+
+bind-key x confirm-before -p "kill-pane #P? (y/n)" kill-pane
+bind-key X confirm-before -p "kill-window #W? (y/n)" kill-window
+bind S command-prompt -p "New session name:" "new-session -A -s '%%'"
+bind B choose-session -Z
+set -g message-logpath ~/.tmux_audit.log
+set -g history-limit 5000
+
+# Initialize TPM
+run '~/.tmux/plugins/tpm/tpm'
+#+end_src
 
 * Yazi
 
 * Zathura
+#+begin_src shell :tangle $HOME/.config/zathura/zathurarc
+# ~/.config/zathura/zathurarc
 
-* Zoxide
+# ----------------------------------
+# Catppuccin Mocha Theme
+# ----------------------------------
+set default-bg                  "#1e1e2e"  # base
+set default-fg                  "#cdd6f4"  # text
 
-* Zsh
+set statusbar-fg                "#cdd6f4"  # text
+set statusbar-bg                "#585b70"  # surface2
 
-#+begin_src sh $HOME/.zshrc
-source ~/.config/fzf/fzf.gentoo
+set inputbar-bg                 "#1e1e2e"  # base
+set inputbar-fg                 "#cdd6f4"  # text
+
+set notification-bg             "#1e1e2e"  # base
+set notification-fg             "#cdd6f4"  # text
+set notification-error-bg       "#1e1e2e"  # base
+set notification-error-fg       "#f38ba8"  # red
+set notification-warning-bg     "#1e1e2e"  # base
+set notification-warning-fg     "#fab387"  # peach
+
+set highlight-color             "#f5c2e7"  # pink
+set highlight-active-color      "#f5e0dc"  # rosewater
+
+set completion-highlight-fg     "#1e1e2e"  # base
+set completion-highlight-bg     "#89b4fa"  # blue
+set completion-bg               "#313244"  # surface0
+set completion-fg               "#cdd6f4"  # text
+
+set recolor-lightcolor          "#1e1e2e"  # base
+set recolor-darkcolor           "#cdd6f4"  # text
+set recolor                     "true"
+set recolor-keephue             "true"
+
+# ----------------------------------
+# Vim-like Keybindings
+# ----------------------------------
+# Navigation
+map j scroll down
+map k scroll up
+map h scroll left
+map l scroll right
+map J navigate next
+map K navigate previous
+map gg navigate first
+map G navigate last
+map <C-u> scroll half-up
+map <C-d> scroll half-down
+map <C-f> scroll full-down
+map <C-b> scroll full-up
+
+# Zooming
+map + zoom in
+map - zoom out
+map = zoom in
+map <C-6> zoom best-fit
+map zi zoom in
+map zo zoom out
+map zz zoom best-fit
+
+# Searching
+map / search
+map ? search backward
+map n search next
+map N search previous
+
+# Modes
+set mode-normal "<esc>"
+map i enter-mode insert
+
+# Tabs
+map gt tab-next
+map gT tab-previous
+map gn tab-open
+map gc tab-close
+
+# ----------------------------------
+# Quality of Life Improvements
+# ----------------------------------
+# UI Settings
+set guioptions ""
+set window-title-basename "true"
+set statusbar-home-tilde "true"
+set statusbar-h-padding 8
+set statusbar-v-padding 8
+set adjust-open "best-fit"
+set pages-per-row 1
+set scroll-page-aware "true"
+set scroll-full-overlap 0.01
+set scroll-step 50
+
+# Input Settings
+set incremental-search "true"
+set wrap-search "true"
+set selection-clipboard "clipboard"
+
+# Performance Settings
+set dbus-service "true"
+set sandbox "strict"
+
+# ----------------------------------
+# Advanced Features
+# ----------------------------------
+# Poppler Features
+set synctex "true"
+set synctex-editor-command "emacsclient +%{line} %{input}"
+set embed-orientation "true"
+
+# Document Settings
+set adjust-open "width"
+set render-loading "false"
+
+# ----------------------------------
+# Wayland Specific Settings
+# ----------------------------------
+set selection-clipboard "clipboard"
+set fs-screen "all"
+
+# ----------------------------------
+# Syntax and Filetype Support
+# ----------------------------------
+# Add custom file associations if needed
+# filetype-assoc update "application/epub+zip" "epub"
+
+# ----------------------------------
+# Gentoo-Specific Optimizations
+# ----------------------------------
+# Use GPU acceleration if available
+set windowing-backend "wayland"
+#+end_src
+
+* TODO Zoxide Zsh
+
+#+begin_src sh :tangle $HOME/.config/zsh/zoxide.zsh
+# ======================
+# Zoxide Configuration
+# ======================
+
+# Initialize zoxide with Catppuccin Mocha theme colors and Gentoo optimizations
+if command -v zoxide >/dev/null; then
+    # Use faster database backend (Gentoo-specific optimization)
+    export _ZO_DATA_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/zoxide"
+    mkdir -p "$_ZO_DATA_DIR"
+
+    # Initialize zoxide with optimized settings
+    eval "$(zoxide init zsh --hook pwd --cmd j)"
+
+    # Enhanced completion (Gentoo-specific paths)
+    compctl -U -K _zoxide_z_cmd -x 'C[-1,-*e],C[-1,-*h]' -c - 'c[-1,-l]' -/ -- j
+
+    # Catppuccin Mocha theme colors for zoxide prompt
+    export _ZO_FG_OLD='#a6adc8'    # Subtext0 (old path color)
+    export _ZO_FG_NEW='#89b4fa'    # Blue (new path color)
+    export _ZO_FG_QUERY='#f5e0dc'  # Rosewater (query color)
+    export _ZO_FG_ERROR='#f38ba8' # Red (error color)
+    export _ZO_FG_SUCCESS='#a6e3a1' # Green (success color)
+
+    # Custom zoxide prompt with Gentoo-inspired colors
+    _zoxide_hook() {
+        local ret=$?
+        if [[ $ret -eq 0 ]]; then
+            print -Pn "%F{$_ZO_FG_SUCCESS}✓%f "
+        else
+            print -Pn "%F{$_ZO_FG_ERROR}✗%f "
+        fi
+        print -Pn "%F{$_ZO_FG_QUERY}Gentoo%f %F{$_ZO_FG_NEW}%~%f "
+    }
+    add-zsh-hook precmd _zoxide_hook
+fi
+
+# ======================
+# Quality of Life Improvements
+# ======================
+
+# Enhanced directory jumping with fzf integration (if available)
+if command -v fzf >/dev/null; then
+    function j() {
+        if [[ $# -eq 0 ]]; then
+            local dir
+            dir=$(zoxide query -l | fzf --height 40% --reverse --tac \
+                --color='bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8' \
+                --color='fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc' \
+                --color='marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8' \
+                --preview 'exa -la --color=always --icons --group-directories-first {}') &&
+            zoxide add "$dir" && builtin cd "$dir"
+        else
+            zoxide query --exclude "$(pwd)" "$@" | head -n 1 | while read -r dir; do
+                [ -n "$dir" ] && zoxide add "$dir" && builtin cd "$dir"
+            done
+        fi
+    }
+fi
+
+# Gentoo-specific directory shortcuts
+alias jportage='j /usr/portage'
+alias joverlay='j /var/db/repos'
+alias jebuilds='j /var/db/pkg'
+alias jmakeconf='j /etc/portage'
+
+# ======================
+# Git Optimizations
+# ======================
+
+# Faster git status for zoxide (async)
+function _zoxide_git_status() {
+    local git_dir
+    git_dir=$(git rev-parse --git-dir 2>/dev/null)
+    if [[ -n "$git_dir" ]]; then
+        local branch
+        branch=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
+        if [[ -n "$branch" ]]; then
+            print -Pn " %F{$_ZO_FG_QUERY}%f%F{#b4befe} ${branch}%f"
+
+            # Async git status indicators
+            {
+                local ahead behind staged unstaged untracked
+                ahead=$(git rev-list --count @{upstream}..HEAD 2>/dev/null)
+                behind=$(git rev-list --count HEAD..@{upstream} 2>/dev/null)
+                staged=$(git diff --cached --numstat | wc -l)
+                unstaged=$(git diff --numstat | wc -l)
+                untracked=$(git ls-files --others --exclude-standard | wc -l)
+
+                [[ "$ahead" -gt 0 ]] && print -Pn " %F{$_ZO_FG_SUCCESS}↑${ahead}%f"
+                [[ "$behind" -gt 0 ]] && print -Pn " %F{$_ZO_FG_ERROR}↓${behind}%f"
+                [[ "$staged" -gt 0 ]] && print -Pn " %F{$_ZO_FG_SUCCESS}●${staged}%f"
+                [[ "$unstaged" -gt 0 ]] && print -Pn " %F{$_ZO_FG_ERROR}✚${unstaged}%f"
+                [[ "$untracked" -gt 0 ]] && print -Pn " %F{$_ZO_FG_QUERY}…${untracked}%f"
+            } &!
+        fi
+    fi
+}
+
+# Add git status to zoxide prompt
+add-zsh-hook precmd _zoxide_git_status
+
+# ======================
+# Gentoo-Specific Optimizations
+# ======================
+
+# Optimize zoxide database location for Gentoo's filesystem structure
+export _ZO_EXCLUDE_DIRS='/usr/portage/distfiles/*:/var/tmp/*:/usr/src/*'
+
+# Faster database updates (Gentoo often has many directory changes)
+export _ZO_MAXAGE=5000  # Increase max age for Gentoo's frequent updates
+
+# Pre-populate zoxide with common Gentoo directories
+[ -f "${_ZO_DATA_DIR}/db.zo" ] || {
+    zoxide add ~
+    zoxide add /etc/portage
+    zoxide add /usr/portage
+    zoxide add /var/db/repos
+    zoxide add /var/db/pkg
+    zoxide add /usr/src/linux
+}
+
+# ======================
+# Advanced ZSH Integration
+# ======================
+
+# Dynamic completion for Gentoo directories
+_zoxide_gentoo_complete() {
+    local -a dirs
+    dirs=(
+        /etc/portage(/)
+        /usr/portage(/)
+        /var/db/repos(/)
+        /var/db/pkg(/)
+        /usr/src/linux(/)
+        ~/.config(/)
+    )
+    _describe 'directory' dirs
+}
+compdef _zoxide_gentoo_complete j
+
+# History integration - log directory changes
+function zoxide-add-history() {
+    local last_command=$(fc -ln -1)
+    if [[ "$last_command" =~ ^(cd|j|z|zi) ]]; then
+        zoxide add "$(pwd)"
+    fi
+}
+add-zsh-hook zshaddhistory zoxide-add-history
+
+# ======================
+# Performance Optimizations
+# ======================
+
+# Use a more efficient hashing algorithm for Gentoo's deep directory structures
+export _ZO_HASH_CMD='xxh64sum'
+
+# Parallel processing for database updates
+if command -v parallel >/dev/null; then
+    export _ZO_UPDATE_CMD="parallel -j $(nproc) -- zoxide add"
+fi
+
+# ======================
+# Final Initialization
+# ======================
+
+# Verify zoxide is working
+if ! command -v zoxide >/dev/null; then
+    print -P "%F{$_ZO_FG_ERROR}Warning:%f zoxide not found. Install with:"
+    print -P "  %F{$_ZO_FG_NEW}emerge -a app-shells/zoxide%f"
+fi
+#+end_src
+
+* TODO Zsh
+
+#+begin_src shell $HOME/.zshrc
 #+end_src
 
 * Setup Script
@@ -2615,5 +3069,8 @@ sudo groupadd clipboard
 sudo usermod -aG clipboard ahsan
 
 (crontab -l 2>/dev/null; echo "0 3 * * 0 cliphist optimize --compact") | crontab -
-#+end_src
 
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm --depth 1
+chmod 700 ~/.tmux && chmod 600 ~/.tmux.conf
+tmux source-file ~/.tmux.conf
+#+end_src
