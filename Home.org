@@ -366,7 +366,7 @@ configuration {
 
 ** 2. Catppuccin Mocha Theme (~/.config/rofi/cliphist/theme.rasi)
 #+begin_src css
-,* {
+* {
     /* Catppuccin Mocha Color Scheme */
     background:     #1e1e2e;
     background-alt: #181825;
