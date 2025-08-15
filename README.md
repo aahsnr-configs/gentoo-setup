@@ -1,8 +1,10 @@
-___To setup selinux for desktop (not yet running in my system), in two primary way: (1)the SELinux stage3 tarballs that are  available and supported - this is significantly easier than performing the steps below. The tarballs can be simply unpacked onto a target system, relabel the entire system, add the initial user to the administration SELinux user and reboot; or (2) follow the guideline put forwared in https://wiki.gentoo.org/wiki/SELinux/Installation___
+**_To setup selinux for desktop (not yet running in my system), in two primary way: (1)the SELinux stage3 tarballs that are available and supported - this is significantly easier than performing the steps below. The tarballs can be simply unpacked onto a target system, relabel the entire system, add the initial user to the administration SELinux user and reboot; or (2) follow the guideline put forwared in https://wiki.gentoo.org/wiki/SELinux/Installation_**
 
 # Disk Preparation
+
 ## Setup LVM
-``````sh
+
+```sh
 cfdisk /dev/nvme0n1 &&
   mkfs.vfat -F 32 /dev/nvme0n1p1 &&
   cryptsetup --cipher aes-xts-plain64 --hash sha512 --use-random --verify-passphrase luksFormat /dev/nvme0n1p2 &&
@@ -17,10 +19,11 @@ cfdisk /dev/nvme0n1 &&
   mkdir /mnt/gentoo &&
   mount /dev/vg0/root /mnt/gentoo &&
   swapon /dev/vg0/swap
-``````
+```
 
 ## Subvolumes
-``````sh
+
+```sh
 btrfs su cr /mnt/gentoo/@ &&
   btrfs su cr /mnt/gentoo/@home &&
   btrfs su cr /mnt/gentoo/@opt &&
@@ -37,10 +40,11 @@ btrfs su cr /mnt/gentoo/@ &&
   btrfs su cr /mnt/gentoo/@var@log@audit &&
   btrfs su cr /mnt/gentoo/@snapshots &&
   umount /mnt/gentoo
-``````
+```
 
 ## Mount Drives
-``````sh
+
+```sh
 mount -o noatime,compress=zstd:3,space_cache=v2,discard=async,subvol=@ /dev/vg0/root /mnt/gentoo &&
   mkdir /mnt/gentoo/home &&
   mount -o noatime,compress=zstd:3,space_cache=v2,discard=async,subvol=@home /dev/vg0/root /mnt/gentoo/home &&
@@ -70,65 +74,76 @@ mount -o noatime,compress=zstd:3,space_cache=v2,discard=async,subvol=@ /dev/vg0/
   mount -o noatime,compress=zstd:3,space_cache=v2,discard=async,subvol=@var@log@audit /dev/vg0/root /mnt/gentoo/var/log/audit &&
   mkdir /mnt/gentoo/.snapshots &&
   mount -o noatime,compress=zstd:3,space_cache=v2,discard=async,subvol=@snapshots /dev/vg0/root /mnt/gentoo/.snapshots
-``````
+```
 
 # Setup Host System for Installing Gentoo and its Packages
+
 ## Setup Base Environment
-[!Note]: You may need update the source tar.xz file 
-``````sh
+
+[!Note]: You may need update the source tar.xz file
+
+```sh
 cd /mnt/gentoo && wget https://distfiles.gentoo.org/releases/amd64/autobuilds/20250413T165021Z/stage3-amd64-desktop-openrc-20250413T165021Z.tar.xz && tar xpvf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner && mkdir --parents /mnt/gentoo/etc/portage/repos.conf && cp /mnt/gentoo/usr/share/portage/config/repos.conf /mnt/gentoo/etc/portage/repos.conf/gentoo.conf && cp --dereference /etc/resolv.conf /mnt/gentoo/etc/ && mount --types proc /proc /mnt/gentoo/proc && mount --rbind /sys /mnt/gentoo/sys && mount --make-rslave /mnt/gentoo/sys && mount --rbind /dev /mnt/gentoo/dev && mount --make-rslave /mnt/gentoo/dev && mount --bind /run /mnt/gentoo/run && mount --make-slave /mnt/gentoo/run && test -L /dev/shm && rm /dev/shm && mkdir /dev/shm && mount -t tmpfs -o nosuid,nodev,noexec shm /dev/shm && chmod 1777 /dev/shm
-``````
+```
 
 ## Copy System Configuration Files to **/mnt/gentoo**
-``````sh
+
+```sh
 rm -R /mnt/gentoo/etc/portage/make.conf && rm -R /mnt/gentoo/etc/portage/package.accept_keywords && rm -R /mnt/gentoo/etc/portage/package.use && rm -R /mnt/gentoo/etc/portage/package.mask && cp -R /home/ahsan/.dots/gentoo/preconfig_files/with_selinux/etc/portage/* /mnt/gentoo/etc/portage/ && cp -R /home/ahsan/.dots/gentoo/preconfig_files/with_selinux/.nanorc /mnt/gentoo/root/  && cp -R /home/ahsan/.dots/gentoo/preconfig_files/with_selinux/tc-optimize /mnt/gentoo/root/
-``````
+```
 
 ## Chroot into Gentoo
+
 [!Note]: Run the following commands one-by-one
-``````sh
+
+```sh
 chroot /mnt/gentoo /bin/bash
 source /etc/profile
 export PS1="(chroot) ${PS1}"
 
 mount /dev/nvme0n1p1 /boot
-``````
+```
 
 # Setting Up Chroot for Installing Packages
+
 ## Initial Sync
-``````sh
+
+```sh
 emerge-webrsync && emerge --sync && eselect profile list
-``````
+```
 
 ## Setup Locales
-``````sh
+
+```sh
 ln -sf ../usr/share/zoneinfo/Asia/Dhaka /etc/localtime && nano /etc/locale.gen && locale-gen && eselect locale list && eselect locale set 4 && env-update && source /etc/profile && export PS1="(chroot) ${PS1}"
-``````
-
-
+```
 
 # PORTAGE && ITS REPOS
-``````sh
+
+```sh
 emerge -aq --jobs=5 app-eselect/eselect-repository dev-vcs/git && eselect repository remove gentoo && eselect repository add gentoo git https://github.com/gentoo-mirror/gentoo.git  && emaint sync -r gentoo && eselect repository enable guru pentoo edgets gentoo-zh CachyOS-kernels xarblu-overlay && eselect repository create custom && emerge --sync
-``````
+```
 
 # PERSONAL REPOS
+
 - eselect repository create custom
 - emerge pkgdev
-- sudo cp -R /home/ahsan/.dots/gentoo/preconfig_files/repos/custom/* /mnt/gentoo/var/db/repos/custom/
+- sudo cp -R /home/ahsan/.dots/gentoo/preconfig_files/repos/custom/\* /mnt/gentoo/var/db/repos/custom/
 - cd var/db/repos/custom/
 - pkgdev manifest
 
 # MODIFICATIONS
+
 - add pypy3_11 python3_13 to python targets
 - re-emerge clang/llvm packages with compiler-clang-lto
 - emerge dev-lang/python:3.13::custom with compiler-clang-lto
 
-
 # SETUP USER
+
 echo zephyrus > /etc/hostname && emerge app-admin/sudo genfstab && passwd && useradd -m -G users,wheel,audio,video -s /bin/bash ahsan && passwd ahsan && EDITOR=nvim visudo
 
 # FSTAB
+
 /swap/swapfile none swap defaults,subvol=@swap 0 0
 
 mount /dev/nvme0n1p1 /boot
@@ -137,11 +152,15 @@ genfstab -U / >> /etc/fstab
 emerge -ev @world --exclude gcc clang python llvm nodejs rust
 
 # KERNEL
+
 ## Packages
-emerge sys-kernel/gentoo-sources sys-kernel/linux-firmware sys-kernel/linux-headers sys-apps/fwupd sys-fs/cryptsetup sys-firmware/sof-firmware sys-fs/genfstab sys-kernel/installkernel sys-kernel/modprobed-db sys-fs/btrfs-progs sys-apps/rng-tools sys-apps/kbd  dev-build/automake sys-apps/dbus  && eselect kernel set 1 && ls -l /usr/src/linux
+
+emerge sys-kernel/gentoo-sources sys-kernel/linux-firmware sys-kernel/linux-headers sys-apps/fwupd sys-fs/cryptsetup sys-firmware/sof-firmware sys-fs/genfstab sys-kernel/installkernel sys-kernel/modprobed-db sys-fs/btrfs-progs sys-apps/rng-tools sys-apps/kbd dev-build/automake sys-apps/dbus && eselect kernel set 1 && ls -l /usr/src/linux
 
 ## Modules
-** gentoo config examples
+
+\*\* gentoo config examples
+
 1. main handbook (done)
 2. dracut (done)
 3. systemd (done)
@@ -166,7 +185,7 @@ emerge sys-kernel/gentoo-sources sys-kernel/linux-firmware sys-kernel/linux-head
 #example
 nvme0n1
 └─nvme0n1p1 4bb45bd6-9ed9-44b3-b547-b411079f043b
-  └─root    cb070f9e-da0e-4bc5-825c-b01bb2707704
+└─root cb070f9e-da0e-4bc5-825c-b01bb2707704
 
 kernel_cmdline+=" root=UUID=cb070f9e-da0e-4bc5-825c-b01bb2707704 rd.luks.uuid=4bb45bd6-9ed9-44b3-b547-b411079f043b "
 
@@ -174,37 +193,37 @@ kernel_cmdline+=" root=UUID=<UUID of /dev/mapper/cryptroot> rd.luks.uuid=<UUID o
 
 #actual
 nvme0n1
-|-nvme0n1p1   1778-CF2B
-|-nvme0n1p2   f6502e18-76b2-4e98-9f68-a082d6dc60ae
-    |__cryptroot e8f3ea91-e5b8-4c25-9a52-bc789d90f3f4
-
+|-nvme0n1p1 1778-CF2B
+|-nvme0n1p2 f6502e18-76b2-4e98-9f68-a082d6dc60ae
+|\_\_cryptroot e8f3ea91-e5b8-4c25-9a52-bc789d90f3f4
 
 #actual
 nvme0n1
-├─nvme0n1p1    6B7E-166F
-└─nvme0n1p2    330a6486-116f-4c74-b282-319ab6c45c53
-  └─cryptlvm   H2jC9K-5PZI-5RL6-EN7l-kaJl-oyM3-pGQoGN
-    ├─vg0-swap 8ae4b3bb-2c21-4b4a-a2f6-d0a708d0a240
-    └─vg0-root 85b93843-925a-41ce-bc2c-b401f8e857a1
+├─nvme0n1p1 6B7E-166F
+└─nvme0n1p2 330a6486-116f-4c74-b282-319ab6c45c53
+└─cryptlvm H2jC9K-5PZI-5RL6-EN7l-kaJl-oyM3-pGQoGN
+├─vg0-swap 8ae4b3bb-2c21-4b4a-a2f6-d0a708d0a240
+└─vg0-root 85b93843-925a-41ce-bc2c-b401f8e857a1
 
-
-nvme0n1        
-├─nvme0n1p1    26FC-E891
-└─nvme0n1p2    84eaf03a-2d7a-440a-aa2f-cdf63d67b3da
-  └─cryptlvm   hbyaUi-q9Zv-1q0b-mI7d-0LhM-yaXB-p1tppR
-    ├─vg0-swap 5a4d6d84-9b4f-448a-9522-48897cd5be33
-    └─vg0-root ffedb9b8-db07-46e7-b4f1-b0ce0b9209b2
-
+nvme0n1  
+├─nvme0n1p1 26FC-E891
+└─nvme0n1p2 84eaf03a-2d7a-440a-aa2f-cdf63d67b3da
+└─cryptlvm hbyaUi-q9Zv-1q0b-mI7d-0LhM-yaXB-p1tppR
+├─vg0-swap 5a4d6d84-9b4f-448a-9522-48897cd5be33
+└─vg0-root ffedb9b8-db07-46e7-b4f1-b0ce0b9209b2
 
 ## DRACUT
+
 ### dracut --print-cmdline opensuse
-rd.driver.pre=btrfs rd.luks.uuid=luks-70522737-f570-45c1-8173-7ffc6a7225d6 rd.lvm.lv=system/swap   rd.lvm.lv=system/root   resume=UUID=5241390b-0fe2-4273-bc97-ecc6e5f6a814 root=UUID=81df9190-81e6-4eaf-bff3-03238a72665e rootfstype=btrfs rootflags=rw,relatime,ssd,space_cache=v2,subvolid=266,subvol=/@/.snapshots/1/snapshot,subvol=@/.snapshots/1/snapshot
+
+rd.driver.pre=btrfs rd.luks.uuid=luks-70522737-f570-45c1-8173-7ffc6a7225d6 rd.lvm.lv=system/swap rd.lvm.lv=system/root resume=UUID=5241390b-0fe2-4273-bc97-ecc6e5f6a814 root=UUID=81df9190-81e6-4eaf-bff3-03238a72665e rootfstype=btrfs rootflags=rw,relatime,ssd,space_cache=v2,subvolid=266,subvol=/@/.snapshots/1/snapshot,subvol=@/.snapshots/1/snapshot
 
 ### dracut --print-cmdline gentoo
-rd.driver.pre=btrfs rd.luks.uuid=luks-84eaf03a-2d7a-440a-aa2f-cdf63d67b3da rd.lvm.lv=vg0/swap rd.lvm.lv=vg0/root resume=UUID=5a4d6d84-9b4f-448a-9522-48897cd5be33 root=UUID=ffedb9b8-db07-46e7-b4f1-b0ce0b9209b2  rootfstype=btrfs
 
+rd.driver.pre=btrfs rd.luks.uuid=luks-84eaf03a-2d7a-440a-aa2f-cdf63d67b3da rd.lvm.lv=vg0/swap rd.lvm.lv=vg0/root resume=UUID=5a4d6d84-9b4f-448a-9522-48897cd5be33 root=UUID=ffedb9b8-db07-46e7-b4f1-b0ce0b9209b2 rootfstype=btrfs
 
 #### With LVM
+
 mkdir /etc/dracut.conf.d/ && nvim /etc/dracut.conf.d/dracut.conf
 hostonly="yes"
 compress="zstd"
@@ -214,15 +233,15 @@ force_drivers+=" btrfs "
 kernel_cmdline+=" rd.luks.uuid=84eaf03a-2d7a-440a-aa2f-cdf63d67b3da root=UUID=ffedb9b8-db07-46e7-b4f1-b0ce0b9209b2 resume=UUID=5a4d6d84-9b4f-448a-9522-48897cd5be33 rd.lvm.lv=vg0/swap rd.lvm.lv=vg0/root "
 
 #### Associated Grub
+
 nvim /etc/default/grub
 GRUB_CMDLINE_LINUX="rootfstype=btrfs quiet loglevel=0 rw rd.vconsole.keymap=us rd.luks.uuid=84eaf03a-2d7a-440a-aa2f-cdf63d67b3da root=UUID=ffedb9b8-db07-46e7-b4f1-b0ce0b9209b2 resume=UUID=5a4d6d84-9b4f-448a-9522-48897cd5be33 rd.lvm.lv=vg0/swap rd.lvm.lv=vg0/root"
 GRUB_CMDLINE_LINUX_DEFAULT=""
 
-
 grub-install --target=x86_64-efi --efi-directory=/boot && grub-mkconfig -o /boot/grub/grub.cfg
 
-
 #### Without LVM
+
 mkdir /etc/dracut.conf.d/ && nvim /etc/dracut.conf.d/dracut.conf
 hostonly="yes"
 compress="zstd"
@@ -232,35 +251,36 @@ force_drivers+=" btrfs hid_asus asus_wmi asus_nb_wmi "
 kernel_cmdline+=" root=UUID=e8f3ea91-e5b8-4c25-9a52-bc789d90f3f4 rd.luks.uuid=f6502e18-76b2-4e98-9f68-a082d6dc60ae "
 
 #### Associated Grub
+
 nvim /etc/default/grub
 GRUB_CMDLINE_LINUX="init=/lib/systemd/systemd nvidia-drm.modeset=1 rootfstype=btrfs quiet loglevel=0 rw rd.vconsole.keymap=us root=UUID=e8f3ea91-e5b8-4c25-9a52-bc789d90f3f4"
 GRUB_CMDLINE_LINUX_DEFAULT="apparmor=1 security=apparmor"
 
-
-
 ### Building the kernel
-``````sh
+
+```sh
 make nconfig LLVM=1 KCFLAGS="-O3 -march=native -pipe -flto=thin -fno-math-errno -fno-signed-zeros -fno-trapping-math -fcf-protection -D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -fstack-protector-strong -fstack-clash-protection -fplugin=LLVMPolly.so -mllvm=-polly -mllvm=-polly-vectorizer=stripmine -mllvm=-polly-omp-backend=LLVM -mllvm=-polly-parallel -mllvm=-polly-num-threads=9 -mllvm=-polly-scheduling=dynamic"
-``````
+```
 
-``````sh
+```sh
 make -j10 LLVM=1 KCFLAGS="-O3 -march=native -pipe -flto=thin -fno-math-errno -fno-signed-zeros -fno-trapping-math -fcf-protection -D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -fstack-protector-strong -fstack-clash-protection -fplugin=LLVMPolly.so -mllvm=-polly -mllvm=-polly-vectorizer=stripmine -mllvm=-polly-omp-backend=LLVM -mllvm=-polly-parallel -mllvm=-polly-num-threads=9 -mllvm=-polly-scheduling=dynamic"
-``````
+```
 
-``````sh
+```sh
 emerge x11-drivers/nvidia-drivers gui-libs/egl-wayland gui-libs/egl-gbm gui-libs/egl-x11 media-libs/nvidia-vaapi-driver sys-process/nvtop x11-drivers/xf86-video-amdgpu
-``````
+```
 
-``````sh
+```sh
 make modules_install -j14 llvm=1 KCFLAGS="-O3 -march=native -pipe -flto=thin -fno-math-errno -fno-signed-zeros -fno-trapping-math -fcf-protection -d_fortify_source=3 -d_glibcxx_assertions -fstack-protector-strong -fstack-clash-protection -fplugin=llvmpolly.so -mllvm=-polly -mllvm=-polly-vectorizer=stripmine -mllvm=-polly-omp-backend=llvm -mllvm=-polly-parallel -mllvm=-polly-num-threads=9 -mllvm=-polly-scheduling=dynamic"
-``````
+```
 
-``````sh
+```sh
 make install -j14 LLVM=1 KCFLAGS="-O3 -march=native -pipe -flto=thin -fno-math-errno -fno-signed-zeros -fno-trapping-math -fcf-protection -D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS -fstack-protector-strong -fstack-clash-protection -fplugin=LLVMPolly.so -mllvm=-polly -mllvm=-polly-vectorizer=stripmine -mllvm=-polly-omp-backend=LLVM -mllvm=-polly-parallel -mllvm=-polly-num-threads=9 -mllvm=-polly-scheduling=dynamic"
-`````` 
+```
 
 # System Packages
-``````sh
+
+```sh
 emerge --ask  \
   app-admin/bitwarden-desktop-bin \
   app-admin/sysstat \
@@ -447,42 +467,48 @@ emerge --ask  \
   sys-fs/genfstab \
   sys-fs/cryptsetup \
   app-backup/grub-btrfs \
-  net-wireless/iwd 
-``````
+  net-wireless/iwd
+```
 
 # OPENRC
+
 rc-update add dhcpcd default && rc-service dhcpcd start && \
-  rc-update delete wpa_supplicant && rc-service wpa_supplicant stop 
+ rc-update delete wpa_supplicant && rc-service wpa_supplicant stop
 
 # SYSTEMD
+
 systemctl enable dhcpcd iwd auditd apparmor rngd
 
-
 # SETUP NETWORK - DHPCD
-  * Use the following guides to setup networking using dhcpcd
-    - https://wiki.gentoo.org/wiki/Systemd/systemd-networkd
-    - https://wiki.gentoo.org/wiki/Network_management_using_DHCPCD
 
-- [-] To get the name of network interface, use ``ifconfig -a``
+- Use the following guides to setup networking using dhcpcd
+  - https://wiki.gentoo.org/wiki/Systemd/systemd-networkd
+  - https://wiki.gentoo.org/wiki/Network_management_using_DHCPCD
+
+* [-] To get the name of network interface, use `ifconfig -a`
 
 cd /etc/init.d &&
-  ln -s net.lo net.wlan0 && 
-  rc-update add net.wlan0 default && cd
+ln -s net.lo net.wlan0 &&
+rc-update add net.wlan0 default && cd
 
 ## Packages
-   emerge net-misc/dhcpcd net-wireless/wpa_supplicant
+
+emerge net-misc/dhcpcd net-wireless/wpa_supplicant
 
 # SYSTEMD
-* use systemd-networkd instead of network-manager
-systemctl enable dhcpcd sysstat auditd rngd nvidia-suspend.service nvidia-resume.service nvidia-hibernate.service nvidia-powerd.service systemd-timesyncd dhpc
 
+- use systemd-networkd instead of network-manager
+  systemctl enable dhcpcd sysstat auditd rngd nvidia-suspend.service nvidia-resume.service nvidia-hibernate.service nvidia-powerd.service systemd-timesyncd dhpc
 
 ## C setup snapper
+
 sudo umount /.snapshots/ && sudo rm -r /.snapshots/ && sudo snapper -c root create-config / && sudo btrfs subvolume delete /.snapshots && sudo mkdir /.snapshots && sudo mount -a && sudo chmod 750 /.snapshots && sudo lvim /etc/snapper/configs/root && sudo systemctl enable --now snapper-timeline.timer && sudo systemctl enable --now snapper-cleanup.timer
 
 ## D Sysctl
+
 `sudo nvim /etc/sysctl.d/harden.conf`
-``````sh
+
+```sh
 kernel.kptr_restrict=2
 kernel.dmesg_restrict=1
 kernel.printk=3
@@ -491,10 +517,13 @@ net.core.bpf_jit_harden=2
 dev.tty.ldisc_autoload=0
 vm.unprivileged_userfaultfd=0
 kernel.kexec_load_disabled=1
-kernel.sysrq=4
+kernel.kptr_restrict=2
+kernel.sysrq=0
+net.ipv4.conf.all.log_martians=1
 kernel.unprivileged_userns_clone=0
 kernel.perf_event_paranoid=3
 net.ipv4.tcp_syncookies=1
+net.ipv4.conf.default.log_martians=1
 net.ipv4.tcp_rfc1337=1
 net.ipv4.conf.all.rp_filter=1
 net.ipv4.conf.default.rp_filter=1
@@ -523,12 +552,15 @@ fs.protected_symlinks=1
 fs.protected_hardlinks=1
 fs.protected_fifos=2
 fs.protected_regular=2
+fs.suid_dumpable=0
 vm.swappiness=35
-``````
+```
 
 ## D Issue
+
 nvim /etc/issue && nvim /etc/issue.net
-``````
+
+```
 -- WARNING -- This system is for the use of authorized users only. Individuals
 using this computer system without authority or in excess of their authority
 are subject to having all their activities on this system monitored and
@@ -536,13 +568,15 @@ recorded by system personnel. Anyone using this system expressly consents to
 such monitoring and is advised that if such monitoring reveals possible
 evidence of criminal activity system personal may provide the evidence of such
 monitoring to law enforcement officials.
-``````
+```
 
 ## G FILES
+
 # G.1 gentoo.conf
 
-nvim  /etc/portage/repos.conf/gentoo.conf
-``````sh
+nvim /etc/portage/repos.conf/gentoo.conf
+
+```sh
 [DEFAULT]
 main-repo = gentoo
 
@@ -553,20 +587,24 @@ sync-uri = https://github.com/gentoo-mirror/gentoo.git
 auto-sync = yes
 sync-git-verify-commit-signature = yes
 sync-openpgp-key-path = /usr/share/openpgp-keys/gentoo-release.asc
-``````
+```
 
 # G2 nvidia.conf
+
 nvim /etc/modprobe.d/nvidia.conf
 options nvidia-drm modeset=1
 options nvidia NVreg_UsePageAttributeTable=1
 
 # G3 nvidia-powermanagement.conf
+
 nvim /etc/modprobe.d/nvidia-power-management.conf
 options nvidia NVreg_PreserveVideoMemoryAllocations=1 NVreg_TemporaryFilePath=/tmp
 
 # G4 /etc/security/limits.conf
+
 nvim /etc/security/limits.conf
-``````
+
+```
 *    soft core 0
 *    hard core 0
 *    hard nproc 15
@@ -576,42 +614,48 @@ nvim /etc/security/limits.conf
 @dev soft nproc 20
 @dev hard nproc 35
 @dev -    maxlogins 10
-``````
+```
 
 ## H Misc
+
 #H1 scaling apps
 --force-device-scale-factor=1.75 %U
 
 # H2 setting password time
+
 sudo chage --mindays 40 \
 --maxdays 120 --warndays 30 ahsan
 
 # H3 chrome sandbox
+
 sudo chown root:root chrome-sandbox
 sudo chmod 4755 chrome-sandbox
 
 # MISC
-## Find class of an app
- - hyprctl clients | grep -i class
 
+## Find class of an app
+
+- hyprctl clients | grep -i class
 
 ## Messages for package sys-fs/btrfsmaintenance-0.5.2:
-``````
+
+```
  * Installing default btrfsmaintenance scripts
- * Now edit cron periods and mount points in /etc/default/btrfsmaintenance 
+ * Now edit cron periods and mount points in /etc/default/btrfsmaintenance
  * then run /usr/share/btrfsmaintenance/btrfsmaintenance-refresh-cron.sh to
  * update cron symlinks or run
  * /usr/share/btrfsmaintenance/btrfsmaintenance-refresh-cron.sh systemd-timer
  * to update systemd timers.
  * You can also enable btrfsmaintenance-refresh.path service in order to
  * monitor the config files changes and update systemd timers accordl
-``````
-
+```
 
 # POST-INSTALL CHROOT
+
 ## Without LVM
-``````sh
-cryptsetup luksOpen /dev/nvme0n1p2 cryptroot  
+
+```sh
+cryptsetup luksOpen /dev/nvme0n1p2 cryptroot
 
 mount -o noatime,compress=zstd,space_cache=v2,discard=async,subvol=@ /dev/mapper/cryptroot /mnt/gentoo &&
   mount -o noatime,compress=zstd,space_cache=v2,discard=async,subvol=@home /dev/mapper/cryptroot /mnt/gentoo/home &&
@@ -637,12 +681,12 @@ mount -o noatime,compress=zstd,space_cache=v2,discard=async,subvol=@ /dev/mapper
   test -L /dev/shm &&
   rm /dev/shm && mkdir /dev/shm &&
   mount -t tmpfs -o nosuid,nodev,noexec shm /dev/shm && chmod 1777 /dev/shm
-``````
-
+```
 
 ## With LVM
+
 ```sh
-cryptsetup luksOpen /dev/nvme0n1p2 cryptlvm  
+cryptsetup luksOpen /dev/nvme0n1p2 cryptlvm
 
 mount -o noatime,compress=zstd,space_cache=v2,discard=async,subvol=@ /dev/vg0/root /mnt/gentoo &&
   mount -o noatime,compress=zstd,space_cache=v2,discard=async,subvol=@home /dev/vg0/root /mnt/gentoo/home &&
@@ -670,7 +714,7 @@ mount -o noatime,compress=zstd,space_cache=v2,discard=async,subvol=@ /dev/vg0/ro
   mount -t tmpfs -o nosuid,nodev,noexec shm /dev/shm && chmod 1777 /dev/shm
 ```
 
-## F Chroot into existing gentoo    
+## F Chroot into existing gentoo
 
 ```sh
 cd /mnt/gentoo
@@ -684,13 +728,13 @@ swapon /dev/vg0/swap
 
 # GENERAL COMMANDS
 
-``````sh
+```sh
 - emacs --batch --eval "(require 'org)" --eval '(org-babel-tangle-file "file-to-tangle.org")'
 - #+begin_src python  :shebang "#!/usr/bin/env python"
 
 - grep 'app-emacs/' /var/lib/portage/world | xargs --open-tty emerge --ask --deselect; emerge --ask --depclean
 
-- esearch esearch -I emacs #list all installed emacs packages 
+- esearch esearch -I emacs #list all installed emacs packages
 
 - :shebang #!/usr/bin/env bash
 
@@ -700,3 +744,4 @@ python3 -c "import sysconfig; print(sysconfig.get_config_var('PY_CFLAGS') + sysc
 - find / -name ".git"
 
 
+```
