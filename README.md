@@ -1,4 +1,4 @@
-**_To setup selinux for desktop (not yet running in my system), in two primary way: (1)the SELinux stage3 tarballs that are available and supported - this is significantly easier than performing the steps below. The tarballs can be simply unpacked onto a target system, relabel the entire system, add the initial user to the administration SELinux user and reboot; or (2) follow the guideline put forwared in https://wiki.gentoo.org/wiki/SELinux/Installation_**
+**_To setup selinux for desktop (not yet running in my system), in two primary way: (1)the SELinux stage3 tarballs that are available and supported - this is significantly easier than performing the steps below. The tarballs can be simply unpacked onto a target system, relabel the entire system, add the initial user to the administration SELinux user and reboot; or (2) follow the guideline put forwared in <https://wiki.gentoo.org/wiki/SELinux/Installation>_**
 
 # Disk Preparation
 
@@ -182,7 +182,7 @@ emerge sys-kernel/gentoo-sources sys-kernel/linux-firmware sys-kernel/linux-head
 /usr/lib64/refind/refind/refind.conf-sample
 
 `lsblk -o name,uuid`
-#example
+# example
 nvme0n1
 └─nvme0n1p1 4bb45bd6-9ed9-44b3-b547-b411079f043b
 └─root cb070f9e-da0e-4bc5-825c-b01bb2707704
@@ -191,13 +191,13 @@ kernel_cmdline+=" root=UUID=cb070f9e-da0e-4bc5-825c-b01bb2707704 rd.luks.uuid=4b
 
 kernel_cmdline+=" root=UUID=<UUID of /dev/mapper/cryptroot> rd.luks.uuid=<UUID of /dev/nvme0n1p2> "
 
-#actual
+# actual
 nvme0n1
 |-nvme0n1p1 1778-CF2B
 |-nvme0n1p2 f6502e18-76b2-4e98-9f68-a082d6dc60ae
 |\_\_cryptroot e8f3ea91-e5b8-4c25-9a52-bc789d90f3f4
 
-#actual
+# actual
 nvme0n1
 ├─nvme0n1p1 6B7E-166F
 └─nvme0n1p2 330a6486-116f-4c74-b282-319ab6c45c53
@@ -482,10 +482,10 @@ systemctl enable dhcpcd iwd auditd apparmor rngd
 # SETUP NETWORK - DHPCD
 
 - Use the following guides to setup networking using dhcpcd
-  - https://wiki.gentoo.org/wiki/Systemd/systemd-networkd
-  - https://wiki.gentoo.org/wiki/Network_management_using_DHCPCD
+  - <https://wiki.gentoo.org/wiki/Systemd/systemd-networkd>
+  - <https://wiki.gentoo.org/wiki/Network_management_using_DHCPCD>
 
-* [-] To get the name of network interface, use `ifconfig -a`
+- [-] To get the name of network interface, use `ifconfig -a`
 
 cd /etc/init.d &&
 ln -s net.lo net.wlan0 &&
@@ -618,7 +618,7 @@ nvim /etc/security/limits.conf
 
 ## H Misc
 
-#H1 scaling apps
+# H1 scaling apps
 --force-device-scale-factor=1.75 %U
 
 # H2 setting password time
@@ -637,7 +637,7 @@ sudo chmod 4755 chrome-sandbox
 
 - hyprctl clients | grep -i class
 
-## Messages for package sys-fs/btrfsmaintenance-0.5.2:
+## Messages for package sys-fs/btrfsmaintenance-0.5.2
 
 ```
  * Installing default btrfsmaintenance scripts
